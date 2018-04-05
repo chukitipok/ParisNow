@@ -1,0 +1,44 @@
+.title{
+	margin-top:10px;
+	text-align: center;
+	color:grey;
+}
+
+.logo{
+	position:relative;
+	left:0px;
+	width:30%;
+	top:0px;
+}
+
+header{
+	background-color:#211F2B;
+	margin-top:-10px;
+	padding-top:10px;
+}
+
+.actionButton{
+	padding-right:5px;
+}
+
+.erreur{
+	color:red;
+}
+
+.succes{
+	color:green;
+}
+
+h5{
+	color:red;
+}
+
+.bOfficeTitle{
+	margin-top:0;
+}
+
+.bOfficeNavigation{
+	padding:0;
+}
+
+p{color:red;}
