@@ -7,7 +7,8 @@ require_once "functions.php";
 if (!empty($_SESSION["token"])) {
     $db = connectDB();
     $query = $db->prepare("SELECT member_lastname AS NOM, member_firstname AS PRENOM, member_email AS EMAIL,
-                                           member_address AS ADRESSE, member_zip_code AS CODE FROM member WHERE member_id = :id AND member_token = :token;");
+                                           member_address AS ADRESSE, member_zip_code AS CODE FROM member 
+                                           WHERE member_id = :id AND member_token = :token;");
     $query->execute([
             "id"=> $_SESSION["id"],
             "token" => $_SESSION["token"]
@@ -34,7 +35,7 @@ if (!empty($_SESSION["token"])) {
                         <tr>
                             <td>
                                 <div class="form-group row ml-auto mr-auto">
-                                    <label for="<?php echo $key .'">'. $key.'</label'?>>
+                                    <label for="<?php echo $key ?>"><?php echo $key ?></label>
                                     <input type="text" class="form-control" name="<?php echo $key ?>"
                                            value="<?php echo $value ?>">
                                 </div>
@@ -43,8 +44,8 @@ if (!empty($_SESSION["token"])) {
                         </tr>
                         <tr>
                             <td>
-                                <button type="submit" style="margin-top: 10%; margin-bottom: 10%" class="btn btn-primary">Actualiser le
-                                    profil
+                                <button type="submit" style="margin-top: 10%; margin-bottom: 10%" class="btn btn-primary">
+                                    Actualiser le profil
                                 </button>
                             </td>
                         </tr>

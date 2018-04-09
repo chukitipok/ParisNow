@@ -106,11 +106,6 @@
             $listeOfErrors[] = 10;
 		}
 
-//		if(strtolower($_POST["captcha"]) != $_SESSION["captcha"]){
-//            $error = true;
-//            $listeOfErrors[] = 12;
-//        }
-
 		if($error){
 			$_SESSION["errorForm"] = $listeOfErrors;
 			$_SESSION["postForm"] = $_POST;
