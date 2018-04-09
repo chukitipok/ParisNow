@@ -45,4 +45,5 @@ else{
 	$_SESSION["connexionNeeded"] = "Vous devez être connecter pour accéder à cette page";
 	include "signup.php";
 }
+include_once "footer.php";
 ?>
