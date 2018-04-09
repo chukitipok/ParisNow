@@ -45,7 +45,7 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
 		            <a class="nav-link" href="index.php">Accueil <span class="sr-only">(current)</span></a>
 		        </li>
 		        <li class="nav-item">
-                    <a class="nav-link" href="bOffice - Users.php">Bar&Restaurant</a>
+                    <a class="nav-link" href="user.php">Page Perso</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="signup.php">Art&Culture</a>
@@ -69,10 +69,6 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
                         "token" => $_SESSION["token"]
                     ]);
                     $result = $query->fetch(PDO::FETCH_ASSOC);
-//                        echo "<pre>";
-//                        print_r($result);
-//                        echo "</pre>";
-//                        die();
                     if ($result["m_status_label"] == "Admin" or $result["m_status_label"] == "Moderator") { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="bOffice - Users.php">Admin</a>

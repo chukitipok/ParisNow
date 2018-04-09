@@ -66,7 +66,6 @@ if (count($_POST) == 2 && isset($_POST["emailConnect"]) && isset($_POST["pwdConn
                                 echo 'checked="checked"';
                             }
                             ?>>
-                        <?php// echo ($key == $defaultGender)?'checked="checked"':""; ?>
                         <?php echo $value; ?>
                     </label>
                 </div>
