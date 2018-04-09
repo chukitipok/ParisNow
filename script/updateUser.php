@@ -21,12 +21,12 @@ if (!empty($_POST["oldPwd"]) && !empty($_POST["newPwd"]) && !empty($_POST["confi
         //pwd : min 8 max 20
         if( strlen($_POST["pwd"])<8 || strlen($_POST["pwd"])>20 ){
             $error = true;
-            $listeOfErrors[] = 9;
+//            $listeOfErrors[] = 9;
         }
         //pwdConfirm = pwd
         if( $_POST["newPwd"] != $_POST["confirmNewPwd"] ){
             $error = true;
-            $listeOfErrors[] = 10;
+//            $listeOfErrors[] = 10;
         }
         if($error){
             $_SESSION["errorForm"] = $listeOfErrors;
