@@ -1,7 +1,6 @@
 <?php
 
 include "header.php";
-
 require_once "functions.php";
 
 if (!empty($_SESSION["token"])) {

@@ -22,11 +22,11 @@
 		$listOfErrors = [];
 
 		//Nettoyer les valeurs
-		$_POST["firstname"] = ucfirst(trim(mb_strtolower($_POST["firstname"], "UTF-8")));
-		$_POST["lastname"] = trim(mb_strtoupper($_POST["lastname"], "UTF-8"));
-		$_POST["email"] = trim(mb_strtolower($_POST["email"], "UTF-8"));
+		$_POST["firstname"] = ucfirst(trim(mb_strtolower($_POST["firstname"])));
+		$_POST["lastname"] = trim(strtoupper($_POST["lastname"]));
+		$_POST["email"] = trim(mb_strtolower($_POST["email"]));
 		$_POST["birthday"] = trim($_POST["birthday"]);
-		$_POST["address"] = trim(mb_strtoupper($_POST["address"], "UTF-8"));
+		$_POST["address"] = trim(mb_strtolower($_POST["address"]));
 		
 		//vérifier les valeurs une par une
 		//gender : soit 0, soit 1, soit 2
@@ -107,9 +107,10 @@
 		}
 
 		if($error){
+			$_SESSION["signUp"] = FALSE;
 			$_SESSION["errorForm"] = $listeOfErrors;
 			$_SESSION["postForm"] = $_POST;
-			header("Location: ../signup.php");
+			Location();
 
 		}else{
 			$query = $connection->prepare(
@@ -131,7 +132,10 @@
 								"password"=>password_hash($pwd, PASSWORD_DEFAULT),
                                 "status"=>0,
 							] );
-            header("Location: ../index.php");
+			$_SESSION["signUp"] = TRUE;
+			$_SESSION["emailConnect"] = $_POST["email"];
+    		$_SESSION["pwdConnect"] = $pwd;
+			connectUser();
 		}
 	}else{
 		die("Tentative de hack");

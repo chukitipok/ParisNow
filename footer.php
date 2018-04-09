@@ -7,7 +7,7 @@
             A accusantium at consectetur.
         </div>
         <div class="footer-content">
-            <h3>Nous contacter</h3>
+            <a href="contact.php"><h3>Nous contacter</h3></a>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus ad commodi consectetur dicta,
             dolor, explicabo facilis non officiis optio, qui quidem quis repellat tenetur voluptatem.
             A accusantium at consectetur.

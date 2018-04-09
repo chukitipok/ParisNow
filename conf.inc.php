@@ -24,3 +24,9 @@ $listOfErrors = [
     11=>"L'email existe déjà",
     12=>"Captcha incorrect"
 ];
+
+$categoryOfContact = [
+    1=>"Idée",
+    2=>"Problème",
+    3=>"Commerciale"
+];
