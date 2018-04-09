@@ -2,6 +2,7 @@
 session_start();
 require "conf.inc.php";
 require "functions.php";
+preventXSS($_POST);
 
 if(isset($_SESSION["token"])){
 	$connection = connectDB();

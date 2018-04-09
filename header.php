@@ -1,13 +1,13 @@
 <?php
 session_start();
 require_once "functions.php";
+preventXSS($_POST);
 
 if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
-    foreach ($_SESSION as $key => $value) {
-        unset($_SESSION[$key]);
+    session_unset();
+    session_destroy();
     }
     unset($_POST["disconnect"]);
-}
 ?>
 
 <!DOCTYPE html>
