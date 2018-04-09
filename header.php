@@ -6,6 +6,7 @@ preventXSS($_POST);
 if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
     session_unset();
     session_destroy();
+    header("Location: index.php");
     }
     unset($_POST["disconnect"]);
 ?>
@@ -45,7 +46,7 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
 		            <a class="nav-link" href="index.php">Accueil <span class="sr-only">(current)</span></a>
 		        </li>
 		        <li class="nav-item">
-                    <a class="nav-link" href="user.php">Page Perso</a>
+                    <a class="nav-link" href="bOffice - Users.php">Bar&Restaurant</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="signup.php">Art&Culture</a>
@@ -92,7 +93,7 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
                         </form>
                     </li>
                 <?php } ?>
-                    ?>
+
 		    </ul>
 
 		  </div>

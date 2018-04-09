@@ -1,40 +1,19 @@
 <?php
-include "header.php";
+require_once "header.php";
 require_once "conf.inc.php";
 require_once "functions.php";
 
 if (count($_POST) == 2 && isset($_POST["emailConnect"]) && isset($_POST["pwdConnect"])) {
-    $_POST["emailConnect"] = strtolower($_POST["emailConnect"]);
+    $_SESSION["emailConnect"] = strtolower($_POST["emailConnect"]);
+    $_SESSION["pwdConnect"] = $_POST["pwdConnect"];
+    connectUser();
 
-    $connection = connectDB();
+}   
 
-    $query = $connection->prepare("SELECT * FROM member WHERE member_email = :email;");
-    $query->execute([
-        "email" => $_POST["emailConnect"]
-    ]);
-    $result = $query->fetch();
-    if($result["member_status"] == 3)
-        echo "Ce compte est bannit";
-    elseif (password_verify($_POST["pwdConnect"], $result["member_password"])) {
-        $_SESSION["auth"] = true;
-        $_SESSION["id"] = $result["member_id"];
-        $_SESSION["token"] = createToken();
-        $query = $connection->prepare("UPDATE member SET member_token = :token WHERE member_id = :id;");
-        $query->execute([
-           "token"=>$_SESSION["token"],
-           "id"=>$_SESSION["id"]
-        ]);
-        header("Location: index.php");
-
-    } else {
-        echo "NOK";
-        $file = fopen('log.txt', 'a+');
-        fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
-        fclose($file);
-    }
+if(isset($_SESSION["connexionNeeded"])){
+    echo "<center><h4 class=connexionNeeded>".$_SESSION["connexionNeeded"]."</h4></center>";
+    unset($_SESSION["connexionNeeded"]);
 }
-
-
 ?>
 
 <div class="row rowsignup">
@@ -66,6 +45,7 @@ if (count($_POST) == 2 && isset($_POST["emailConnect"]) && isset($_POST["pwdConn
                                 echo 'checked="checked"';
                             }
                             ?>>
+                        <?php// echo ($key == $defaultGender)?'checked="checked"':""; ?>
                         <?php echo $value; ?>
                     </label>
                 </div>

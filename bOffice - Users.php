@@ -3,7 +3,7 @@ require "bOffice - header.php";
 $time = time();
 		$date = new DateTime("now", new DateTimeZone('Europe/Paris'));
 		$date->setTimestamp($time);
-		$actualDate = $date->format('d/m/y à H\h:i\m:s\s');
+		$actualDate = $date->format('d/m/Y à H\h:i\m:s\s');
 
 if(isset($_POST["cancelDelete"])){
 	

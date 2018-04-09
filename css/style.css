@@ -74,26 +74,11 @@ footer{
     margin-left: 4%;
 }
 
-/* CSS FOR USER.PHP*/
-.container{
-    display: table;
-    width: 75%;
-}
-#profile-picture{
-    display: table-cell;
-    width: 100%;
-    height: 300px;
-    text-align: center;
-    vertical-align: middle;
-
-}
-.profile-picture {
-    border-radius: 50%;
-    width: 200px;
-    height: 180px;
+.connexionNeeded{
+    margin-top:10px;
+    color:red;
 }
 
-#information{
-    display: inline-block;
-    width: 100%;
+.rowsignup{
+    padding-top:5px;
 }
