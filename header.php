@@ -64,8 +64,9 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
                 if(!empty($_SESSION["token"])) {
                     $db = connectDB();
                     $query = $db->prepare("SELECT m_status_label FROM m_status
-                                                    WHERE m_status_id = (SELECT member_status FROM member WHERE member_token= :token);");
+                                                    WHERE m_status_id = (SELECT member_status FROM member WHERE member_id = :id AND member_token= :token);");
                     $query->execute([
+                            "id"=> $_SESSION["id"],
                         "token" => $_SESSION["token"]
                     ]);
                     $result = $query->fetch(PDO::FETCH_ASSOC);
@@ -91,13 +92,6 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
                         </form>
                     </li>
                 <?php } ?>
-<!--                --><?php
-//                echo "<pre>";
-//                print_r($_SESSION);
-//                echo "</pre>";
-//                die();
-                    
-                    ?>
 		    </ul>
 
 		  </div>

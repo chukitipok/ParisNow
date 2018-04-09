@@ -7,96 +7,127 @@ require_once "functions.php";
 if (!empty($_SESSION["token"])) {
     $db = connectDB();
     $query = $db->prepare("SELECT member_lastname AS NOM, member_firstname AS PRENOM, member_email AS EMAIL,
-                                           member_address AS ADRESSE, member_zip_code AS  FROM member WHERE member_token = :token;");
+                                           member_address AS ADRESSE, member_zip_code AS CODE FROM member WHERE member_id = :id AND member_token = :token;");
     $query->execute([
-        "token" => $_SESSION["token"]
+            "id"=> $_SESSION["id"],
+            "token" => $_SESSION["token"]
     ]);
     $result = $query->fetch(PDO::FETCH_ASSOC);
 }
 
-
 ?>
-<div class="container">
-    <div id="profile-picture" class="">
-        <img class="profile-picture" src="img/paris1.jpg" alt="profile picture">
-        <br>
-        <button style="margin-top: 10px" class="btn btn-primary">Modifier</button>
+    <div class="container">
+        <div id="profile-picture" class="">
+            <img class="profile-picture" src="img/paris1.jpg" alt="profile picture">
+            <br>
+            <button style="margin-top: 15px" class="btn btn-primary">Modifier</button>
+        </div>
     </div>
-</div>
 
-<div class="container container-fluid">
-    <div id="information">
-        <h2>Information</h2>
-        <div class="mr-auto ml-auto">
-            <form method="POST">
-                <table class="mr-auto ml-auto">
-                    <?php foreach ($result as $row) { ?>
+    <div class="container container-fluid">
+        <div id="information">
+            <h2>Changer vos informations</h2>
+            <div class="mr-auto ml-auto">
+                <form method="POST" action="script/updateUser.php">
+                    <table class="mr-auto ml-auto">
+                        <?php foreach ($result as $key => $value) { ?>
                         <tr>
                             <td>
                                 <div class="form-group row ml-auto mr-auto">
-                                    <label>NOM</label>
-                                    <input type="text" class="form-control align-content-center" disabled="disabled"
-                                           value="">
-                                    <input type="text" class="form-control" name="lastname" value=<?php echo isset($_POST["lastname"]) ? $_POST["lastname"]: '' ?>>
+                                    <label for="<?php echo $key .'">'. $key.'</label'?>>
+                                    <input type="text" class="form-control" name="<?php echo $key ?>"
+                                           value="<?php echo $value ?>">
                                 </div>
                             </td>
                             <?php } ?>
-                            <td>
-                                <button type="submit" style="margin-left: 20%" class="btn btn-primary">Modifier</button>
-                            </td>
                         </tr>
                         <tr>
                             <td>
-                                <div class="form-group row ml-auto mr-auto">
-                                    <label>Prénom</label>
-                                    <input type="text" class="form-control align-content-center" disabled="disabled"
-                                           value=<?php echo $value ?>>
-                                    <input type="text" class="form-control" name="firstname"
-                                           value="">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="submit" style="margin-left: 20%" class="btn btn-primary">Modifier</button>
+                                <button type="submit" style="margin-top: 10%; margin-bottom: 10%" class="btn btn-primary">Actualiser le
+                                    profil
+                                </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <div class="form-group row ml-auto mr-auto">
-                                    <label>Adresse</label>
-                                    <input type="text" class="form-control align-content-center" disabled="disabled"
-                                           value=<?php echo $value ?>>
-                                    <input type="text" class="form-control" name="address"
-                                           value="">
+                    </table>
+                </form>
+            </div>
+            <div id="password">
+                <h2>Changer votre mot de passe</h2>
+                <div class="mr-auto ml-auto">
+                    <form method="POST" action="script/updateUser.php">
+                        <table class="ml-auto mr-auto">
+                            <tr>
+                                <td>
+                                    <div class="form-group row ml-auto mr-auto">
+                                        <label>MOT DE PASSE</label>
+                                        <input type="text" class="form-control" name="oldPwd">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row ml-auto mr-auto">
+                                        <label>NOUVEAU MOT DE PASSE</label>
+                                        <input type="text" class="form-control" name="newPwd">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row ml-auto mr-auto">
+                                        <label>CONFIRMER MOT DE PASSE</label>
+                                        <input type="text" class="form-control" name="confirmNewPwd">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="submit" style="margin-top: 7%; margin-bottom: 10%" class="btn btn-primary">Changer le mot de passe</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div id="delete">
+                <h2>Supprimer son compte</h2>
+                <div class="mr-auto ml-auto">
+                    <form method="POST" action="script/updateUser.php">
+                        <!-- Button trigger modal -->
+                        <button type="button" style="margin-top: 3%; margin-bottom: 5%" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                            Supprimer le compte
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Supprimer le compte</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Toutes données vous concernant seront définitivement perdues.<br>
+                                        Êtes-vous sûr de vouloir supprimer votre compte?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" name="deleteAcount" class="btn btn-danger">Supprimer</button>
+                                    </div>
                                 </div>
-                            </td>
-                            <td>
-                                <button type="submit" style="margin-left: 20%" class="btn btn-primary">Modifier</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="form-group row ml-auto mr-auto">
-                                    <label>Code postal</label>
-                                    <input type="text" class="form-control align-content-center" disabled="disabled"
-                                           value=<?php echo $value ?>>
-                                    <input type="text" class="form-control" name="zipcode"
-                                           value="<?php echo isset($_POST["zipcode"]) ? $_POST["zipcode"] : '' ?>">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="submit" style="margin-left: 20%" class="btn btn-primary">Modifier</button>
-                            </td>
-                        </tr>
-                        <?php
-                        if (!empty($_POST["lastname"])) {
-                            $query = $db->prepare("UPDATE member SET member_lastname = :lastname");
-                            $query->execute([
-                                "lastname" => $_POST["lastname"]
-                            ]);
-                        }
-                        ?>
-                </table>
-            </form>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+
+<?php
+
+include "footer.php";
+
+?>

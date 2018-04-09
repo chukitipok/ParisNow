@@ -26,7 +26,7 @@
 		$_POST["lastname"] = trim(mb_strtoupper($_POST["lastname"], "UTF-8"));
 		$_POST["email"] = trim(mb_strtolower($_POST["email"], "UTF-8"));
 		$_POST["birthday"] = trim($_POST["birthday"]);
-		$_POST["address"] = trim(mb_strtolower($_POST["address"], "UTF-8"));
+		$_POST["address"] = trim(mb_strtoupper($_POST["address"], "UTF-8"));
 		
 		//vérifier les valeurs une par une
 		//gender : soit 0, soit 1, soit 2
