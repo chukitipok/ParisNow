@@ -81,4 +81,103 @@ footer{
 
 .rowsignup{
     padding-top:5px;
+=======
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.rowsignup{
+    padding-top: 50px;
+}
+
+header{
+    display: table;
+    width: 100%;
+    height: 200px;
+}
+
+#logo {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#logo img {
+    width: 27%;
+}
+
+.container-fluid{
+    padding: 0;
+
+}
+
+.carousel{
+    width: 45%;
+    margin: 0 auto 5% auto;
+}
+
+.navbar{
+    background-color: rgba(255,255,255, 0.9);
+}
+.navbar-light {
+    border: solid 1px #000;
+}
+
+.sticky-top{
+    z-index: 50;
+}
+
+.wrapper{
+    width: 80%;
+}
+
+footer{
+    display: table;
+    background-color: #0b141a;
+    color: white;
+    width: 100%;
+    height: 250px;
+    margin-top: 5%;
+}
+
+.general{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.footer-content{
+    display: inline-block;
+    width: 350px;
+    margin-left: 8%;
+}
+.content{
+    display: inline-block;
+    width: 350px;
+    margin-left: 4%;
+}
+
+/* CSS FOR USER.PHP*/
+.container{
+    display: table;
+    width: 75%;
+}
+#profile-picture{
+    display: table-cell;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    vertical-align: middle;
+
+}
+.profile-picture {
+    border-radius: 50%;
+    width: 200px;
+    height: 180px;
+}
+
+#information, #password {
+    display: inline-block;
+    width: 100%;
 }
