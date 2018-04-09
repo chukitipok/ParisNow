@@ -4,9 +4,9 @@ html, body {
     width: 100%;
 }
 
-.rowsignup{
+/*.rowsignup{
     padding-top: 50px;
-}
+}*/
 
 header{
     display: table;
@@ -96,4 +96,9 @@ footer{
 #information, #password {
     display: inline-block;
     width: 100%;
+}
+
+.connexionNeeded{
+    margin-top:10px;
+    color:red;
 }
