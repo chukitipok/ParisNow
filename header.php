@@ -46,7 +46,7 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
 		            <a class="nav-link" href="index.php">Accueil <span class="sr-only">(current)</span></a>
 		        </li>
 		        <li class="nav-item">
-                    <a class="nav-link" href="bOffice - Users.php">Bar&Restaurant</a>
+                    <a class="nav-link" href="user.php">Page perso</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="signup.php">Art&Culture</a>
