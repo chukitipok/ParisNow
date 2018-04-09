@@ -1,13 +1,13 @@
 <?php
 session_start();
 require_once "functions.php";
+preventXSS($_POST);
 
 if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
-    foreach ($_SESSION as $key => $value) {
-        unset($_SESSION[$key]);
+    session_unset();
+    session_destroy();
     }
     unset($_POST["disconnect"]);
-}
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +70,7 @@ if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
                         "token" => $_SESSION["token"]
                     ]);
                     $result = $query->fetch(PDO::FETCH_ASSOC);
+
                     if ($result["m_status_label"] == "Admin" or $result["m_status_label"] == "Moderator") { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="bOffice - Users.php">Admin</a>

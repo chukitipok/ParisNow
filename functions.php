@@ -22,3 +22,10 @@ function isConnected(){
 function createToken(){
     return md5(uniqid(rand(), true));
 }
+
+function preventXSS(){
+	foreach ($_POST as $key => $value) {
+	$_POST[$key] = htmlspecialchars($_POST[$key]);
+}
+	return $_POST;
+}

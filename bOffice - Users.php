@@ -1,19 +1,47 @@
 <?php
 require "bOffice - header.php"; 
-
 $time = time();
 		$date = new DateTime("now", new DateTimeZone('Europe/Paris'));
 		$date->setTimestamp($time);
 		$actualDate = $date->format('d/m/y à H\h:i\m:s\s');
 
+if(isset($_POST["cancelDelete"])){
+	
+	foreach ($_SESSION["cancelDelete"] as $key2 => $value2) {
+
+		if(!isset($column_name) && (!isset($valuesInserted))){
+			$columnName = $key2;
+			$valuesInserted = $value2;
+		}
+		
+		elseif($value2 =="")
+			$value2 = Null;
+
+		elseif(is_numeric($value2)){
+			$columnName = $columnName.",".$key2;
+			$valuesInserted = $valuesInserted.",".$value2;
+		}
+
+		else{
+			$columnName = $columnName.",".$key2;
+			$valuesInserted = $valuesInserted.",'".$value2."'";	
+		}
+	}
+	$connection = connectDB();
+	$query = $connection->prepare("INSERT INTO member(".$columnName.") VALUES(".$valuesInserted.")");
+	$query->execute();	
+}
+
 if(isset($_POST["emailOfUserDelete"])){
 	$connection = connectDB();
 
-	$query = $connection->prepare("SELECT member_status,member_lastname,member_firstname,member_email FROM member where member_email= :email");
+	$query = $connection->prepare("SELECT * FROM member where member_email= :email");
 	$query->execute([
 		"email"=>$_POST["emailOfUserDelete"]
 	]);
-	$result = $query->fetch(PDO::FETCH_ASSOC);	
+	$result = $query->fetch(PDO::FETCH_ASSOC);
+	$cancel = '<form method="POST"><input type="hidden" value="cancel" name="cancelDelete"><button type="submit">annuler</button></form>';
+	$_SESSION["cancelDelete"] = $result;	
 	if($result["member_status"] != 2 && $_SESSION["admin"]){
 		$query = $connection->prepare("DELETE FROM member where member_email= :email");
 		$query->execute([
@@ -22,7 +50,7 @@ if(isset($_POST["emailOfUserDelete"])){
 		$file = fopen('logDelete.txt', 'a+');
         fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a supprimé le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
         fclose($file);
-		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été supprimé</h2></center>';
+		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été supprimé</h2>'.$cancel.'</center>';
 	}
 	else{
 ?>
@@ -95,9 +123,9 @@ if(isset($_POST["emailOfUserUnban"])){
 			"email"=>$_POST["emailOfUserUnban"]
 		]);
 		$file = fopen('logBan.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a débannit le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
+        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a débanni le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
         fclose($file);
-		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été débannit</h2></center>';
+		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été débanni</h2></center>';
 	}
 	else{
 ?>
@@ -121,9 +149,9 @@ if(isset($_POST["emailOfUserBan"])){
 			"email"=>$_POST["emailOfUserBan"]
 		]);
 		$file = fopen('logBan.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a bannit le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
+        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a banni le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
         fclose($file);
-		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été bannit</h2></center>';
+		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été banni</h2></center>';
 	}
 	else{
 ?>
@@ -175,7 +203,7 @@ if(isset($_POST["emailOfUserBan"])){
 									<option value="0">Membre</option>
 									<option value="1">Modérateur</option>
 									<option value="2">Administrateur</option>
-									<option value="3">Bannit</option>
+									<option value="3">Banni</option>
 								</select>
 							</div>
 						</div>
@@ -205,7 +233,6 @@ if(isset($_POST["emailOfUserBan"])){
 		}
 
 		elseif(!empty($_POST["searchLastname"]) || !empty($_POST["searchFirstname"]) || !empty($_POST["searchEmail"]) || !empty($_POST["searchStatus"])){
-			
 			$connection = connectDB();	
 			$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member WHERE member_lastname= :lastName OR member_firstname= :firstName OR member_email= :email OR member_status= :status");
 
@@ -246,7 +273,7 @@ if(isset($_POST["emailOfUserBan"])){
 						break;
 
 						case 3:
-						echo "Bannit";
+						echo "Banni";
 						break;
 
 						default:
@@ -320,4 +347,5 @@ if(isset($_POST["emailOfUserBan"])){
 ?>
 	</div>
 
-<?php include "bOffice - footer.php" ?>
+<?php 
+include "bOffice - footer.php" ?>
