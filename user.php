@@ -71,7 +71,7 @@ if (!empty($_SESSION["token"])) {
                                 <tr>
                                     <td>
                                         <div class="form-group row ml-auto mr-auto">
-                                            <label>MOT DE PASSE</label>
+                                            <label>MOT DE PASSE ACTUEL</label>
                                             <input type="text" class="form-control" name="oldPwd">
                                         </div>
                                     </td>
