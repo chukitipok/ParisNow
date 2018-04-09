@@ -36,9 +36,6 @@ if (!empty($_SESSION["token"])) {
             </div>
         </div>
 
-        <div class="container container-fluid">
-            <div id="information">
-                <h2>Changer vos informations</h2>
     <div class="container container-fluid">
         <div id="information">
             <h2>Changer vos informations</h2>
