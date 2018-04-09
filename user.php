@@ -92,34 +92,32 @@ if (!empty($_SESSION["token"])) {
             <div id="delete">
                 <h2>Supprimer son compte</h2>
                 <div class="mr-auto ml-auto">
-                    <form method="POST" action="script/updateUser.php">
-                        <!-- Button trigger modal -->
-                        <button type="button" style="margin-top: 3%; margin-bottom: 5%" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
-                            Supprimer le compte
-                        </button>
+                    <!-- Button trigger modal -->
+                    <button type="button" style="margin-top: 3%; margin-bottom: 5%" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                        Supprimer le compte
+                    </button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Supprimer le compte</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Toutes données vous concernant seront définitivement perdues.<br>
-                                        Êtes-vous sûr de vouloir supprimer votre compte?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                        <button type="submit" name="deleteAcount" class="btn btn-danger">Supprimer</button>
-                                    </div>
+                    <!-- POP-UP DELETE ACCOUNT -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Supprimer le compte</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Toutes données vous concernant seront définitivement perdues.<br>
+                                    Êtes-vous sûr de vouloir supprimer votre compte?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    <a href="script/delete-account.php"><button type="button" class="btn btn-danger">Supprimer</button></a>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
