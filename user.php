@@ -100,3 +100,7 @@ if (!empty($_SESSION["token"])) {
         </div>
     </div>
 </div>
+
+<?php
+    include "footer.php";
+?>
