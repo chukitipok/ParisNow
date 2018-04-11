@@ -45,7 +45,7 @@ if(isset($_SESSION["connexionNeeded"])){
                                 echo 'checked="checked"';
                             }
                             ?>>
-                        <?php// echo ($key == $defaultGender)?'checked="checked"':""; ?>
+                        <?php // echo ($key == $defaultGender)?'checked="checked"':""; ?>
                         <?php echo $value; ?>
                     </label>
                 </div>
