@@ -72,7 +72,7 @@ if (!empty($_SESSION["token"])) {
                                     <td>
                                         <div class="form-group row ml-auto mr-auto">
                                             <label>MOT DE PASSE ACTUEL</label>
-                                            <input type="text" class="form-control" name="oldPwd">
+                                            <input type="password" class="form-control" name="oldPwd">
                                         </div>
                                     </td>
                                 </tr>
@@ -80,7 +80,7 @@ if (!empty($_SESSION["token"])) {
                                     <td>
                                         <div class="form-group row ml-auto mr-auto">
                                             <label>NOUVEAU MOT DE PASSE</label>
-                                            <input type="text" class="form-control" name="newPwd">
+                                            <input type="password" class="form-control" name="newPwd">
                                         </div>
                                     </td>
                                 </tr>
@@ -88,7 +88,7 @@ if (!empty($_SESSION["token"])) {
                                     <td>
                                         <div class="form-group row ml-auto mr-auto">
                                             <label>CONFIRMER MOT DE PASSE</label>
-                                            <input type="text" class="form-control" name="confirmNewPwd">
+                                            <input type="password" class="form-control" name="confirmNewPwd">
                                         </div>
                                     </td>
                                 </tr>
