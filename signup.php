@@ -9,7 +9,7 @@ if(isset($_SESSION["connexionNeeded"])){
     unset($_SESSION["connexionNeeded"]);
 }
 ?>
-
+<!--has changed-->
 <div class="row rowsignup">
     <div class="col-md-4 ml-auto mr-auto">
         <center><h2>S'inscrire</h2></center>
