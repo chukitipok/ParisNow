@@ -80,8 +80,9 @@ if(isConnected()){
                                     <td>
                                         <div class="form-group row ml-auto mr-auto">
                                             <label>MOT DE PASSE ACTUEL</label>
-                                            <input type="password" class="form-control" name="oldPwd">
 <!--                                            --><?php //echo (isset($_SESSION["errorFormPwd"]))?"<span style = 'color:red'>" . $listOfErrorsPwd[$keyError] . "</span>":""; ?>
+                                            <input type="password" class="form-control" name="oldPwd">
+
                                         </div>
                                     </td>
                                 </tr>

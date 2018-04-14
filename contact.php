@@ -13,7 +13,7 @@ if(isConnected()){
 			</div>
 				<select>
 					<?php foreach ($categoryOfContact as $key => $value) {
-						echo "<option name=t_category>".$value."</option>";
+						echo "<option name='t_category'>".$value."</option>";
 					}
 					?>
 				</select>
@@ -36,7 +36,7 @@ if(isConnected()){
 				<input type="submit" value="Envoyer"></input>
 			</div>
 		</form>
-	</div>z
+	</div>
 <?php
 }
 
