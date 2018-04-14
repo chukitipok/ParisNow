@@ -3,12 +3,6 @@ require_once "header.php";
 require_once "conf.inc.php";
 require_once "functions.php";
 
-if (count($_POST) == 2 && isset($_POST["emailConnect"]) && isset($_POST["pwdConnect"])) {
-    $_SESSION["emailConnect"] = strtolower($_POST["emailConnect"]);
-    $_SESSION["pwdConnect"] = $_POST["pwdConnect"];
-    connectUser();
-
-}   
 
 if(isset($_SESSION["connexionNeeded"])){
     echo "<center><h4 class=connexionNeeded>".$_SESSION["connexionNeeded"]."</h4></center>";
@@ -17,7 +11,7 @@ if(isset($_SESSION["connexionNeeded"])){
 ?>
 
 <div class="row rowsignup">
-    <div class="col-md-4 ml-auto">
+    <div class="col-md-4 ml-auto mr-auto">
         <center><h2>S'inscrire</h2></center>
 
         <?php
@@ -117,31 +111,6 @@ if(isset($_SESSION["connexionNeeded"])){
             unset($_SESSION['postForm']);
             ?>
         </form>
-    </div>
-
-    <div class="col-md-4 mr-auto">
-        <center><h2>Se connecter</h2></center>
-
-        <form method="POST">
-            <div class="form-group">
-                <label for="emailLogin">Votre email</label>
-
-                <input type="email" class="form-control" id="emailLogin" aria-describedby="emailHelp"
-                       placeholder="test@domain.fr" name="emailConnect">
-
-            </div>
-
-
-            <div class="form-group">
-                <label for="pwdLogin">Mot de passe</label>
-                <input type="password" class="form-control" id="pwdLogin" name="pwdConnect">
-            </div>
-
-
-            <button type="submit" class="btn btn-primary">Se connecter</button>
-
-        </form>
-
     </div>
 
 </div>

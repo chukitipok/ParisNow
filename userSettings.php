@@ -1,6 +1,7 @@
 <?php
 
 include "header.php";
+require_once "conf.inc.php";
 require_once "functions.php";
 
 if(isConnected()){
@@ -15,17 +16,7 @@ if(isConnected()){
         ]);
         $result = $query->fetch(PDO::FETCH_ASSOC);
     }
-if (!empty($_SESSION["token"])) {
-    $db = connectDB();
-    $query = $db->prepare("SELECT member_lastname AS NOM, member_firstname AS PRENOM, member_email AS EMAIL,
-                                           member_address AS ADRESSE, member_zip_code AS CODE FROM member 
-                                           WHERE member_id = :id AND member_token = :token;");
-    $query->execute([
-            "id"=> $_SESSION["id"],
-            "token" => $_SESSION["token"]
-    ]);
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-}
+
 
     ?>
         <div class="container">
@@ -39,19 +30,28 @@ if (!empty($_SESSION["token"])) {
     <div class="container container-fluid">
         <div id="information">
             <h2>Changer vos informations</h2>
+            <?php
+            if (isset($_SESSION["errorFormInfo"])) {
+                foreach ($_SESSION["errorFormInfo"] as $keyError) {
+                    echo "<li style = 'color:red'>" . $listOfErrorsInfo[$keyError] . "</li>";
+                }
+                unset($_SESSION["errorFormInfo"]);
+            }
+            ?>
             <div class="mr-auto ml-auto">
                 <form method="POST" action="script/updateUser.php">
                     <table class="mr-auto ml-auto">
-                        <?php foreach ($result as $key => $value) { ?>
-                        <tr>
-                            <td>
-                                <div class="form-group row ml-auto mr-auto">
-                                    <label for="<?php echo $key ?>"><?php echo $key ?></label>
-                                    <input type="text" class="form-control" name="<?php echo $key ?>"
-                                           value="<?php echo $value ?>">
-                                </div>
-                            </td>
-                            <?php } ?>
+                        <?php
+                            foreach ($result as $key => $value) { ?>
+                            <tr>
+                                <td>
+                                    <div class="form-group row ml-auto mr-auto">
+                                        <label for="<?php echo $key ?>"><?php echo $key ?></label>
+                                        <input type="text" class="form-control" name="<?php echo $key ?>"
+                                               value="<?php echo $value ?>">
+                                    </div>
+                                </td>
+                        <?php } ?>
                         </tr>
                         <tr>
                             <td>
@@ -61,18 +61,27 @@ if (!empty($_SESSION["token"])) {
                             </td>
                         </tr>
                     </table>
+                    <?php unset($_SESSION['postFormInfo']); ?>
                 </form>
             </div>
                 <div id="password">
                     <h2>Changer votre mot de passe</h2>
+                    <?php
+                        if (isset($_SESSION["errorFormPwd"])) {
+                            foreach ($_SESSION["errorFormPwd"] as $keyError) {
+                                echo "<span style = 'color:red'>" . $listOfErrorsPwd[$keyError] . "</span>";
+                            }
+                            unset($_SESSION["errorFormPwd"]);
+                        } ?>
                     <div class="mr-auto ml-auto">
-                        <form method="POST" action="script/updateUser.php">
+                        <form method="POST" action="script/changePwd.php">
                             <table class="ml-auto mr-auto">
                                 <tr>
                                     <td>
                                         <div class="form-group row ml-auto mr-auto">
                                             <label>MOT DE PASSE ACTUEL</label>
                                             <input type="password" class="form-control" name="oldPwd">
+<!--                                            --><?php //echo (isset($_SESSION["errorFormPwd"]))?"<span style = 'color:red'>" . $listOfErrorsPwd[$keyError] . "</span>":""; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -98,6 +107,7 @@ if (!empty($_SESSION["token"])) {
                                     </td>
                                 </tr>
                             </table>
+                            <?php unset($_SESSION['postFormPwd']); ?>
                         </form>
                     </div>
                 </div>
@@ -141,7 +151,7 @@ if (!empty($_SESSION["token"])) {
 <?php
 }
 else{
-    $_SESSION["previousLocation"] = "user.php";
+    $_SESSION["previousLocation"] = "userSettings.php";
     $_SESSION["connexionNeeded"] = "Vous devez être connecter pour accéder à cette page";
     include "signup.php";
 }
