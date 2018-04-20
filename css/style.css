@@ -102,3 +102,46 @@ footer{
     margin-top:10px;
     color:red;
 }
+
+.smallTitle{
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
+.error{
+    color:red;
+}
+
+.success{
+    color:green;
+}
+
+.ticketTitle{
+    margin-bottom: 0px;
+}
+
+.ticket{
+    border:3px solid grey;
+    margin-left: 5%;
+    margin-top:20px;
+    padding-top:10px;
+}
+
+/*.ticket:nth-child(4n+0){
+    margin-left: 7%;
+}*/
+
+.openTicket{
+    position:absolute;
+    bottom: 10px;
+}
+
+.ticketExtract{
+    margin-bottom:60px;
+    border:1px solid grey;
+    color:grey;
+    padding:5px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    height:30%;
+}
