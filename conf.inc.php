@@ -22,27 +22,17 @@ $listOfErrors = [
     9=>"Le mot de passe doit faire entre 8 et 20 caractères",
     10=>"Le mot de passe de confirmation ne correspond pas",
     11=>"L'email existe déjà",
-    12=>"Tous les champs doivent être remplis"
-];
-
-$listOfErrorsInfo = [
-    1=>"Le nom doit faire plus de 2 caractères",
-    2=>"Le prénom doit faire plus de 2 caractères",
-    3=>"L'email n'est pas valide",
-    4=>"L'adresse n'est pas valide",
-    5=>"Le code postal n'est pas valide",
-    6=>"L'email existe déjà",
-    7=>"Tous les champs doivent être remplis"
-];
-
-$listOfErrorsPwd = [
-    1=>"Le mot de passe ne correspond pas au mot de passe actuel",
-    2=>"Le mot de passe doit faire entre 8 et 20 caractères",
-    3=>"Le mot de passe de confirmation ne correspond pas",
+    12=>"Captcha incorrect"
 ];
 
 $categoryOfContact = [
     1=>"Idée",
     2=>"Problème",
     3=>"Commerciale"
+];
+
+$listOfTicketError = [
+    1=>"La catégorie n'est pas valide.",
+    2=>"Le titre doit faire entre 4 et 60 caractères.",
+    3=>"Le contenu du ticket doit faire entre 10 et 1 000 caractères.",
 ];

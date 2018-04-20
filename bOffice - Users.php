@@ -1,9 +1,6 @@
 <?php
 require "bOffice - header.php"; 
-$time = time();
-		$date = new DateTime("now", new DateTimeZone('Europe/Paris'));
-		$date->setTimestamp($time);
-		$actualDate = $date->format('d/m/Y à H\h:i\m:s\s');
+$time = getTimeForLog();
 
 if(isset($_POST["cancelDelete"])){
 	
@@ -29,7 +26,12 @@ if(isset($_POST["cancelDelete"])){
 	}
 	$connection = connectDB();
 	$query = $connection->prepare("INSERT INTO member(".$columnName.") VALUES(".$valuesInserted.")");
-	$query->execute();	
+	$query->execute();
+	$file = fopen('logDelete.txt', 'a+');
+        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a annulé la suppression du membre ".$_SESSION["cancelDelete"]["member_lastname"]." ".$_SESSION["cancelDelete"]["member_firstname"]." email : ".$_SESSION["cancelDelete"]["member_email"]." le : ".$actualDate."\r\n");
+        fclose($file);
+		echo '<center><h2 class="succes">Action effectué : La suppression du membre '.$_SESSION["cancelDelete"]["member_lastname"].' '.$_SESSION["cancelDelete"]["member_firstname"].' à bien été annuler</h2>';
+
 }
 
 if(isset($_POST["emailOfUserDelete"])){
@@ -347,5 +349,5 @@ if(isset($_POST["emailOfUserBan"])){
 ?>
 	</div>
 
-<?php 
+<?php
 include "bOffice - footer.php" ?>

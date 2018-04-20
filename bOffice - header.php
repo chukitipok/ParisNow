@@ -5,15 +5,7 @@ require "functions.php";
 preventXSS($_POST);
 
 if(isset($_SESSION["token"])){
-	$connection = connectDB();
-
-	$query = $connection->prepare("SELECT member_status,member_firstname,member_lastname FROM MEMBER where member_token= :token");
-
-	$query->execute([
-		"token"=>$_SESSION["token"]
-	]);
-
-	$result = $query->fetch(PDO::FETCH_ASSOC);
+	$result = getinfo("*");
 	if($result["member_status"] == 2){
 		$_SESSION["admin"] = TRUE;
 		$_SESSION["moderateur"] = FALSE;
@@ -25,6 +17,7 @@ if(isset($_SESSION["token"])){
 		$_SESSION["status"] = "Modérateur";
 	}
 	else{
+		echo "fail";
 		header("Location: index.php");
 	}
 	$_SESSION["name"] = $result["member_lastname"];
