@@ -32,13 +32,16 @@ $listOfErrorsInfo = [
     4=>"L'adresse n'est pas valide",
     5=>"Le code postal n'est pas valide",
     6=>"L'email existe déjà",
-    7=>"Tous les champs doivent être remplis"
+    7=>"Tous les champs doivent être remplis",
+    8=>"Le nom est invalide",
+    9=>"Le prénom est invalide"
 ];
 
 $listOfErrorsPwd = [
     1=>"Le mot de passe ne correspond pas au mot de passe actuel",
     2=>"Le mot de passe doit faire entre 8 et 20 caractères",
     3=>"Le mot de passe de confirmation ne correspond pas",
+    4=>"Tous les champs doivent être remplis"
 ];
 
 $categoryOfContact = [

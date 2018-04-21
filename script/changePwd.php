@@ -49,8 +49,13 @@
                 ]);
                 header("Location: ../userSettings.php");
             }
-        }else
+        }else {
+            $listeOfErrorsPwd[] = 4;
+            $_SESSION["changePwd"] = false;
+            $_SESSION["errorFormPwd"] = $listeOfErrorsPwd;
+            $_SESSION["postFormPwd"] = $_POST;
             header("Location: ../userSettings.php");
+        }
     }else{
         die("Tentative hack");
     }
