@@ -22,7 +22,26 @@ $listOfErrors = [
     9=>"Le mot de passe doit faire entre 8 et 20 caractères",
     10=>"Le mot de passe de confirmation ne correspond pas",
     11=>"L'email existe déjà",
-    12=>"Captcha incorrect"
+    12=>"Tous les champs doivent être remplis"
+];
+
+$listOfErrorsInfo = [
+    1=>"Le nom doit faire plus de 2 caractères",
+    2=>"Le prénom doit faire plus de 2 caractères",
+    3=>"L'email n'est pas valide",
+    4=>"L'adresse n'est pas valide",
+    5=>"Le code postal n'est pas valide",
+    6=>"L'email existe déjà",
+    7=>"Tous les champs doivent être remplis",
+    8=>"Le nom est invalide",
+    9=>"Le prénom est invalide"
+];
+
+$listOfErrorsPwd = [
+    1=>"Le mot de passe ne correspond pas au mot de passe actuel",
+    2=>"Le mot de passe doit faire entre 8 et 20 caractères",
+    3=>"Le mot de passe de confirmation ne correspond pas",
+    4=>"Tous les champs doivent être remplis"
 ];
 
 $categoryOfContact = [

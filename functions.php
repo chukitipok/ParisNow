@@ -67,36 +67,32 @@ function Location(){
 	}
 }
 
-function connectUser(){
-
-	$connection = connectDB();
+function connectUser()
+{
+    $connection = connectDB();
     $query = $connection->prepare("SELECT * FROM member WHERE member_email = :email;");
     $query->execute([
         "email" => $_SESSION["emailConnect"]
     ]);
     $result = $query->fetch();
-    if($result["member_status"] == 3){
-    	session_unset();
-    	session_destroy();
+    if ($result["member_status"] == 3) {
+        session_unset();
+        session_destroy();
         echo "Ce compte est bannit";
-	}
-
-    elseif (password_verify($_SESSION["pwdConnect"], $result["member_password"])) {
+    } elseif (password_verify($_SESSION["pwdConnect"], $result["member_password"])) {
         $_SESSION["auth"] = true;
         $_SESSION["id"] = $result["member_id"];
         $_SESSION["token"] = createToken();
         $query = $connection->prepare("UPDATE member SET member_token = :token WHERE member_id = :id;");
         $query->execute([
-           "token"=>$_SESSION["token"],
-           "id"=>$_SESSION["id"]
+            "token" => $_SESSION["token"],
+            "id" => $_SESSION["id"]
         ]);
         unset($_SESSION["pwdConnect"]);
         unset($_SESSION["emailConnect"]);
         return location();
-	}
-
-	else{
-	echo "NOK";
+	}else{
+	  echo "NOK";
     $file = fopen('log.txt', 'a+');
     fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
     fclose($file);
@@ -166,4 +162,13 @@ function getTimeForLog(){
     $date->setTimestamp($time);
     $actualDate = $date->format('d/m/Y à H\h:i\m:s\s');
     return $actualDate;
+}
+
+function verif_alpha($str){
+    preg_match("/([^A-Za-z])/",$str,$result);
+//On cherche tt les caractères autre que [A-z]
+    if(!empty($result)){//si on trouve des caractère autre que A-z
+        return false;
+    }
+    return true;
 }
