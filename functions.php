@@ -5,6 +5,7 @@ require_once "conf.inc.php";
 function connectDB(){
 		try{
 			$connection = new PDO(DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";charset=".CHARSET,DBUSER,DBPWD);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 		catch(Exception $e){
 			die("Erreur SQL :".$e->getMessage());	
@@ -90,12 +91,77 @@ function connectUser()
         unset($_SESSION["pwdConnect"]);
         unset($_SESSION["emailConnect"]);
         return location();
-    } else {
-        echo "NOK";
-        $file = fopen('log.txt', 'a+');
-        fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
-        fclose($file);
+	}else{
+	  echo "NOK";
+    $file = fopen('log.txt', 'a+');
+    fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
+    fclose($file);
     }
+}
+
+function getInfo($column){
+    if(isConnected()){
+        if(isset($column)){
+            $connection = connectDB();
+            $query = $connection->prepare("SELECT ".$column." FROM member WHERE member_id = :id AND member_token = :token;");
+                $query->execute([
+                        "id"=> $_SESSION["id"],
+                        "token" => $_SESSION["token"]
+                ]);
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }
+    }
+}
+
+function createTicketId(){
+    $id = rand(1000000000, 9999999999);
+    return $id;
+} 
+
+function unsetAdmin(){
+    if(isset($_SESSION["admin"]))
+        unset($_SESSION["admin"]);
+    if(isset($_SESSION["moderateur"]))
+        unset($_SESSION["moderateur"]);
+    if(isset($_SESSION["status"]))
+        unset($_SESSION["status"]);
+    if(isset($_SESSION["name"]))
+        unset($_SESSION["name"]);
+    if(isset($_SESSION["firstName"]))
+        unset($_SESSION["firstName"]);
+}
+
+function ticketInformation(){
+    if(isset($_POST["closeTicket"])){
+        $ticketID = $_POST["closeTicket"];
+    }
+
+    elseif(isset($_POST["ticketId"])){
+        $ticketID = $_POST["ticketId"];
+    }
+
+    elseif(isset($_POST["reopenTicket"])){
+        $ticketID = $_POST["reopenTicket"];
+    }
+
+    $userInfo = getInfo("member_id");
+    $connection = connectDB();
+    $query = $connection->prepare("SELECT * FROM ticket WHERE member= :member_id AND ticket_id= :id");
+    $query->execute([
+        "member_id"=>$userInfo["member_id"],
+        "id"=>$ticketID
+    ]);
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function getTimeForLog(){
+    $time = time();
+    $date = new DateTime("now", new DateTimeZone('Europe/Paris'));
+    $date->setTimestamp($time);
+    $actualDate = $date->format('d/m/Y à H\h:i\m:s\s');
+    return $actualDate;
 }
 
 function verif_alpha($str){

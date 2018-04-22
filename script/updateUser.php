@@ -1,9 +1,12 @@
 <?php
-    session_start();
-    require "../conf.inc.php";
-    require "../functions.php";
+session_start();
+require "../conf.inc.php";
+require "../functions.php";
 
-    $db = connectDB();
+//echo "<pre>";
+//print_r( $_SESSION );
+//echo "</pre>";
+//die();
 
     if (count($_POST) == 5) {
         //values not empty
@@ -95,6 +98,6 @@
             $_SESSION["postFormInfo"] = $_POST;
             header("Location: ../userSettings.php");
         }
-    }else {
-        die("Tentative de hack");
+    }else{
+      die("Tentative de hack");
     }

@@ -49,3 +49,9 @@ $categoryOfContact = [
     2=>"Problème",
     3=>"Commerciale"
 ];
+
+$listOfTicketError = [
+    1=>"La catégorie n'est pas valide.",
+    2=>"Le titre doit faire entre 4 et 60 caractères.",
+    3=>"Le contenu du ticket doit faire entre 10 et 1 000 caractères.",
+];
