@@ -74,7 +74,7 @@ unset($_POST["disconnect"]);
                 <?php
                 if (!isConnected()){ ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="signup.php">Forum</a>
+                        <a class="nav-link" href="signup.php">S'inscrire</a>
                     </li>
                     <li>
                         <button type="button" style="margin-top: 3%; margin-bottom: 5%" class="btn btn-primary"
