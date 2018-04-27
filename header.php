@@ -3,13 +3,7 @@ session_start();
 require_once "functions.php";
 preventXSS($_POST);
 unsetAdmin();
-
-if (count($_POST) == 2 && isset($_POST["emailConnect"]) && isset($_POST["pwdConnect"])) {
-    $_SESSION["emailConnect"] = strtolower($_POST["emailConnect"]);
-    $_SESSION["pwdConnect"] = $_POST["pwdConnect"];
-    connectUser();
-
-}
+print_r($_SESSION);
 
 if(isset($_POST["disconnect"]) && $_POST["disconnect"] == "disconnect"){
     session_unset();
@@ -71,78 +65,36 @@ unset($_POST["disconnect"]);
                 <li class="nav-item">
                     <a class="nav-link" href="signup.php">Forum</a>
                 </li>
-                <?php
-                if (!isConnected()){ ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="signup.php">S'inscrire</a>
-                    </li>
-                    <li>
-                        <button type="button" style="margin-top: 3%; margin-bottom: 5%" class="btn btn-primary"
-                                data-toggle="modal" data-target="#connection">
-                          Connexion
-                        </button>
-                    </li>
 
-                <?php } else{
+                <?php
+                if(!empty($_SESSION["token"])) {
                     $result = getInfo("*");
                     if ($result["member_status"] == 2 or $result["member_status"] == 1) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="bOffice - Users.php">Admin</a>
-                        </li>
-                <?php } ?>
                     <li class="nav-item">
-                        <!-- Example single danger button -->
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <?php
-                                echo "Bonjour " . $result["member_firstname"];
-                                ?>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="userSettings.php">Mon profil</a>
-                                <a class="dropdown-item" href="userTicket.php">Mes tickets</a>
-                                <a class="dropdown-item" href="#">Mes événements (TODO)</a>
-                                <div class="dropdown-divider"></div>
-                                <form method="POST">
-                                    <button type="submit" class="dropdown-item" name="disconnect" value="disconnect">Se déconnecter</button>
-                                </form>
-                            </div>
-                        </div>
+                        <a class="nav-link" href="bOffice - Users.php">Admin</a>
+                    </li>
+                    <?php
+                }
+            }
+            if(empty($_SESSION["token"])) {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="signup.php">S'inscrire/Se connecter</a>
+                </li>
+                <?php }
+
+                else{
+                   ?>
+                   <li class="nav-item">
+                    <form method="POST">
+                        <button action="submit" class="btn" name="disconnect" value="disconnect">Se déconnecter</button>
+                    </form>
                 </li>
                 <?php } ?>
             </ul>
+
         </div>
     </nav>
-        <!-- POP-UP CONNECT USER -->
-        <div class="modal fade" id="connection" tabindex="-1" role="dialog"
-             aria-labelledby="connectionCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="connectionTitle">Connexion</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST">
-                            <div class="form-group">
-                                <label for="emailLogin">Votre email</label>
-
-                                <input type="email" class="form-control" id="emailLogin" aria-describedby="emailHelp"
-                                       placeholder="test@domain.fr" name="emailConnect">
-                            </div>
-                            <div class="form-group">
-                                <label for="pwdLogin">Mot de passe</label>
-                                <input type="password" class="form-control" id="pwdLogin" name="pwdConnect">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Se connecter</button>
-                            <span>Mot de passe oublié ?</span>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
 

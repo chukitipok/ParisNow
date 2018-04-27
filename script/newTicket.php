@@ -22,6 +22,7 @@ if(count($_POST) == 3
 	}
 
 	$_POST["ticket_label"] = ucfirst(trim(mb_strtolower($_POST["ticket_label"])));
+	$_POST["ticket_content"] = trim($_POST["ticket_content"]);
 
 	if(strlen($_POST["ticket_content"]) > 1000 || strlen($_POST["ticket_content"]) < 10){
 		$error=true;
@@ -51,17 +52,20 @@ if(count($_POST) == 3
 		}
 		$time = getTimeForlog();
 		$result = getInfo("member_id, member_firstname, member_lastname");
+		echo $result["member_id"]."<br>";
+		echo $ticketId."<br>";
 		$connection = connectDB();
 		$ticketContent = "<u>".$result["member_firstname"]." ".$result["member_lastname"]." le ".$time." :</u> <br>".$_POST["ticket_content"]."<br>";
 		echo $ticketContent."<br>";
-		$query = $connection->prepare("INSERT INTO ticket(ticket_id,t_category,ticket_label,ticket_content, member,ticket_date,state, last_update) VALUES(:id, :category, :label, :ticket_content, :member, NOW(), :state, NOW())");
+		$query = $connection->prepare("INSERT INTO ticket(ticket_id,t_category,ticket_label,ticket_content, member,ticket_date,state, last_update, author_last_update) VALUES(:id, :category, :label, :ticket_content, :member, NOW(), :state, NOW(), :author_last_update)");
 		$query->execute([
 			"id"=>$ticketId,
 			"category"=>$_POST["t_category"],
 			"label"=>$_POST["ticket_label"],
 			"ticket_content"=>$ticketContent,
 			"member"=> $result["member_id"],
-			"state"=>0
+			"state"=>0,
+			"author_last_update"=>$result["member_id"]
 		]);
 
 		$_SESSION["ticketSubmitted"] = true;

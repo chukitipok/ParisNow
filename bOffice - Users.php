@@ -2,7 +2,7 @@
 require "bOffice - header.php"; 
 $time = getTimeForLog();
 
-if(isset($_POST["cancelDelete"])){
+if(isset($_POST["cancelDelete"]) && isset($_SESSION["cancelDelete"])){
 	
 	foreach ($_SESSION["cancelDelete"] as $key2 => $value2) {
 
@@ -28,10 +28,10 @@ if(isset($_POST["cancelDelete"])){
 	$query = $connection->prepare("INSERT INTO member(".$columnName.") VALUES(".$valuesInserted.")");
 	$query->execute();
 	$file = fopen('logDelete.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a annulé la suppression du membre ".$_SESSION["cancelDelete"]["member_lastname"]." ".$_SESSION["cancelDelete"]["member_firstname"]." email : ".$_SESSION["cancelDelete"]["member_email"]." le : ".$actualDate."\r\n");
-        fclose($file);
-		echo '<center><h2 class="succes">Action effectué : La suppression du membre '.$_SESSION["cancelDelete"]["member_lastname"].' '.$_SESSION["cancelDelete"]["member_firstname"].' à bien été annuler</h2>';
-
+	fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a annulé la suppression du membre ".$_SESSION["cancelDelete"]["member_lastname"]." ".$_SESSION["cancelDelete"]["member_firstname"]." email : ".$_SESSION["cancelDelete"]["member_email"]." le : ".$time."\r\n");
+	fclose($file);
+	echo '<center><h2 class="succes">Action effectué : La suppression du membre '.$_SESSION["cancelDelete"]["member_lastname"].' '.$_SESSION["cancelDelete"]["member_firstname"].' a bien été annulé</h2';
+	unset($_SESSION["cancelDelete"]);
 }
 
 if(isset($_POST["emailOfUserDelete"])){
@@ -42,25 +42,31 @@ if(isset($_POST["emailOfUserDelete"])){
 		"email"=>$_POST["emailOfUserDelete"]
 	]);
 	$result = $query->fetch(PDO::FETCH_ASSOC);
-	$cancel = '<form method="POST"><input type="hidden" value="cancel" name="cancelDelete"><button type="submit">annuler</button></form>';
-	$_SESSION["cancelDelete"] = $result;	
-	if($result["member_status"] != 2 && $_SESSION["admin"]){
-		$query = $connection->prepare("DELETE FROM member where member_email= :email");
-		$query->execute([
-			"email"=>$_POST["emailOfUserDelete"]
-		]);
-		$file = fopen('logDelete.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a supprimé le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
-        fclose($file);
-		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été supprimé</h2>'.$cancel.'</center>';
+	if(!empty($result)){
+		$_SESSION["cancelDelete"] = $result;
+		$cancel = '<form method="POST"><input type="hidden" value="cancel" name="cancelDelete"><button type="submit" class="btn cancelButton">annuler</button></form>';
+
+		if($result["member_status"] != 2 && $_SESSION["admin"]){
+			$query = $connection->prepare("DELETE FROM member where member_email= :email");
+			$query->execute([
+				"email"=>$_POST["emailOfUserDelete"]
+			]);
+			$file = fopen('logDelete.txt', 'a+');
+			fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a supprimé le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$time."\r\n");
+			fclose($file);
+			echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' a bien été supprimé</h2>'.$cancel.'</center>';
+		}
+
+		else{
+			echo '<center><h2 class="erreur">Erreur: Vous n\'avez pas les droits pour effectuer cette action</h2></center>';
+		}
 	}
 	else{
-?>
-		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2><center>
-<?php 
+		if(isset($_SESSION["cancelDelete"]))
+			unset($_SESSION["cancelDelete"]);
+		echo '<center><h2 class="erreur">Erreur: Vous n\'avez pas les droits pour effectuer cette action</h2></center>';
 	}
 }
-
 if(isset($_POST["emailOfUserPromote"])){
 	$connection = connectDB();
 
@@ -75,14 +81,14 @@ if(isset($_POST["emailOfUserPromote"])){
 			"email"=>$_POST["emailOfUserPromote"]
 		]);
 		$file = fopen('logPromotion.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a promu le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
-        fclose($file);
+		fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a promu le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$time."\r\n");
+		fclose($file);
 		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été promu Modérateur</h2></center>';
 	}
 	else{
-?>
-		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2><center>
-<?php 
+		?>
+		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
+		<?php 
 	}
 }
 
@@ -100,14 +106,14 @@ if(isset($_POST["emailOfUserDemote"])){
 			"email"=>$_POST["emailOfUserDemote"]
 		]);
 		$file = fopen('logPromotion.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a déchu le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
-        fclose($file);
+		fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a déchu le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$time."\r\n");
+		fclose($file);
 		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été déchu Membre</h2></center>';
 	}
 	else{
-?>
-		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2><center>
-<?php 
+		?>
+		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
+		<?php 
 	}
 }
 
@@ -125,14 +131,14 @@ if(isset($_POST["emailOfUserUnban"])){
 			"email"=>$_POST["emailOfUserUnban"]
 		]);
 		$file = fopen('logBan.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a débanni le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
-        fclose($file);
+		fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a débanni le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$time."\r\n");
+		fclose($file);
 		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été débanni</h2></center>';
 	}
 	else{
-?>
-		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2><center>
-<?php 
+		?>
+		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
+		<?php 
 	}
 }
 
@@ -151,55 +157,56 @@ if(isset($_POST["emailOfUserBan"])){
 			"email"=>$_POST["emailOfUserBan"]
 		]);
 		$file = fopen('logBan.txt', 'a+');
-        fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a banni le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$actualDate."\r\n");
-        fclose($file);
+		fwrite($file, $_SESSION["status"]." : ".$_SESSION["name"]." ".$_SESSION["firstName"]." a banni le membre ".$result["member_lastname"]." ".$result["member_firstname"]." email : ".$result["member_email"]." le : ".$time."\r\n");
+		fclose($file);
 		echo '<center><h2 class="succes">Action effectué : Le membre '.$result["member_lastname"].' '.$result["member_firstname"].' à bien été banni</h2></center>';
 	}
 	else{
-?>
-		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2><center>
-<?php 
+		?>
+		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
+		<?php 
 	}
 }
 
 ?>
-	<div>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Nom de famille</th>
-					<th>Prénom</th>
-					<th>Email</th>
-					<th>Statut</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
+<div>
+	<table class="table table-striped">
+		<thead>
 			<tr>
+				<th>Nom de famille</th>
+				<th>Prénom</th>
+				<th>Email</th>
+				<th>Statut</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>		
 				<form method="POST">
 					<td>
 						<div class="container-fluid row">
-							<div class="">
+							<div>
 								<input type="text" class="form-control" id="searchLastname" placeholder="search" name="searchLastname" value="">
 							</div>
 						</div>
 					</td>
 					<td>
 						<div class="container-fluid row">
-							<div class="">
+							<div>
 								<input type="text" class="form-control" id="searchFirstname" placeholder="search" name="searchFirstname" value="">
 							</div>
 						</div>
 					</td>
 					<td>
 						<div class="container-fluid row">
-							<div class="">
+							<div>
 								<input type="text" class="form-control" id="searchEmail" placeholder="search" name="searchEmail" value="">
 							</div>
 						</div>
 					</td>
 					<td>
 						<div class="container-fluid row">
-							<div class="">
+							<div>
 								<select name="searchStatus" class="form-control">
 									<option value="All">Tous</option>
 									<option value="0">Membre</option>
@@ -211,143 +218,144 @@ if(isset($_POST["emailOfUserBan"])){
 						</div>
 					</td>
 					<td>
-						<div class="">
-							<div class="">
+						<div>
+							<div>
 								<button type="submit" class="btn btn-primary">Rechercher</button>
 							</div>
 						</div>
 					</td>
 				</form>
 			</tr>
-		<?php
-		if(isset($_POST["searchStatus"]) && $_POST["searchStatus"] == "All")
-			$_POST["searchStatus"] = Null;
+			<?php
+			if(isset($_POST["searchStatus"]) && $_POST["searchStatus"] == "All")
+				$_POST["searchStatus"] = Null;
 
-		if(empty($_POST["searchLastname"]) && empty($_POST["searchFirstname"]) && empty($_POST["searchEmail"]) && isset($_POST["searchStatus"])){
+			if(empty($_POST["searchLastname"]) && empty($_POST["searchFirstname"]) && empty($_POST["searchEmail"]) && isset($_POST["searchStatus"])){
 
-			$connection = connectDB();
+				$connection = connectDB();
 
-			$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member WHERE member_status = :status");
+				$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member WHERE member_status = :status");
 
-			$query->execute([
-				"status"=>$_POST["searchStatus"]
-			]);
-		}
+				$query->execute([
+					"status"=>$_POST["searchStatus"]
+				]);
+			}
 
-		elseif(!empty($_POST["searchLastname"]) || !empty($_POST["searchFirstname"]) || !empty($_POST["searchEmail"]) || !empty($_POST["searchStatus"])){
-			$connection = connectDB();	
-			$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member WHERE member_lastname= :lastName OR member_firstname= :firstName OR member_email= :email OR member_status= :status");
+			elseif(!empty($_POST["searchLastname"]) || !empty($_POST["searchFirstname"]) || !empty($_POST["searchEmail"]) || !empty($_POST["searchStatus"])){
+				$connection = connectDB();	
+				$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member WHERE member_lastname= :lastName OR member_firstname= :firstName OR member_email= :email OR member_status= :status");
 
-			$query->execute([
-				"lastName"=>$_POST["searchLastname"],
-				"firstName"=>$_POST["searchFirstname"],
-				"email"=>$_POST["searchEmail"],
-				"status"=>$_POST["searchStatus"]
-			]);
-		}
+				$query->execute([
+					"lastName"=>$_POST["searchLastname"],
+					"firstName"=>$_POST["searchFirstname"],
+					"email"=>$_POST["searchEmail"],
+					"status"=>$_POST["searchStatus"]
+				]);
+			}
 
-		else{
-			$connection = connectDB();
+			else{
+				$connection = connectDB();
 
-			$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member");
+				$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member");
 
-			$query->execute();
-		}
+				$query->execute();
+			}
 
-		$result = $query->fetchAll(PDO::FETCH_ASSOC);
+			$result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-		foreach ($result as $value){
-			echo "<tr>";
-			foreach ($value as $key => $value2){
-				if($key == "member_status"){
-					echo "<td>";
-					switch ($value2){
-						case 0:
-						echo "Membre";
-						break;
+			foreach ($result as $value){
+				echo "<tr>";
+				foreach ($value as $key => $value2){
+					if($key == "member_status"){
+						echo "<td>";
+						switch ($value2){
+							case 0:
+							echo "Membre";
+							break;
 
-						case 1:
-						echo "Modérateur";
-						break;
+							case 1:
+							echo "Modérateur";
+							break;
 
-						case 2:
-						echo "Administrateur";
-						break;
+							case 2:
+							echo "Administrateur";
+							break;
 
-						case 3:
-						echo "Banni";
-						break;
+							case 3:
+							echo "Banni";
+							break;
 
-						default:
-						echo "erreur - statut non existant";
+							default:
+							echo "erreur - statut non existant";
+						}
+						echo "</td>";
+						$statusOfMember = $value2;
 					}
-					echo "</td>";
-					$statusOfMember = $value2;
+
+					else{
+						echo "<td>".$value2."</td>";
+					}
+
+					if($key == "member_email"){
+						$emailOfMember = $value2;
+					}				
+				}
+				$beginButton = '<td><div class="row">';
+				$endButton = '</div></td></tr>';
+
+				$eraseButton = ($_SESSION["admin"])? '<div class="actionButton">
+				<form method="POST">
+				<input type="hidden" name="emailOfUserDelete" value='.$emailOfMember.'>
+				<button type="submit" class="btn deleteButton">Supprimer</button>
+				</form>
+				</div>': "";
+				if(($_SESSION["moderateur"] && $statusOfMember != 1 && $statusOfMember != 3) || ($_SESSION["admin"] && $statusOfMember != 2 && $statusOfMember !=3)){
+					$banButton ='<div class="actionButton">
+					<form method="POST">
+					<input type="hidden" name="emailOfUserBan" value='.$emailOfMember.'>
+					<button type="submit" class="btn button">Bannir</button>
+					</form>
+					</div>';
+				}
+				elseif ($statusOfMember == 3) {
+					$banButton = '<div class="actionButton">
+					<form method="POST">
+					<input type="hidden" name="emailOfUserUnban" value='.$emailOfMember.'>
+					<button type="submit" class="btn button">Débannir</button>
+					</form>
+					</div>';
+				}
+				else{
+					$banButton = "";
+				}
+
+				if($statusOfMember == 0 && $_SESSION["admin"]){
+					$rankButton = '<div class="actionButton">
+					<form method="POST">
+					<input type="hidden" name="emailOfUserPromote" value='.$emailOfMember.'>
+					<button type="submit" class="btn button">Promouvoir</button>
+					</form>
+					</div>';
+				}
+
+				elseif($statusOfMember == 1 && $_SESSION["admin"]){
+					$rankButton = '<div class="actionButton">
+					<form method="POST">
+					<input type="hidden" name="emailOfUserDemote" value='.$emailOfMember.'>
+					<button type="submit" class="btn button">Destituer</button>
+					</form>
+					</div>';
 				}
 
 				else{
-					echo "<td>".$value2."</td>";
+					$rankButton ="";
 				}
-
-				if($key == "member_email"){
-					$emailOfMember = $value2;
-				}				
+				echo ($statusOfMember==2)? "<td></td></tr>": $beginButton.$banButton.$rankButton.$eraseButton.$endButton;
 			}
-		$beginButton = '<td><div class="row">';
-		$endButton = '</div></td></tr>';
-
-		$eraseButton = ($_SESSION["admin"])? '<div class="actionButton">
-					<form method="POST">
-						<input type="hidden" name="emailOfUserDelete" value='.$emailOfMember.'>
-						<button type="submit">Supprimer</button>
-					</form>
-				</div>': "";
-		if(($_SESSION["moderateur"] && $statusOfMember != 1 && $statusOfMember != 3) || ($_SESSION["admin"] && $statusOfMember != 2 && $statusOfMember !=3)){
-				$banButton ='<div class="actionButton">
-					<form method="POST">
-						<input type="hidden" name="emailOfUserBan" value='.$emailOfMember.'>
-						<button type="submit">Bannir</button>
-					</form>
-				</div>';
-			}
-		elseif ($statusOfMember == 3) {
-			$banButton = '<div class="actionButton">
-					<form method="POST">
-						<input type="hidden" name="emailOfUserUnban" value='.$emailOfMember.'>
-						<button type="submit">Débannir</button>
-					</form>
-				</div>';
-			}
-		else{
-			$banButton = "";
-		}
-
-		if($statusOfMember == 0 && $_SESSION["admin"]){
-			$rankButton = '<div class="actionButton">
-					<form method="POST">
-						<input type="hidden" name="emailOfUserPromote" value='.$emailOfMember.'>
-						<button type="submit">Promouvoir</button>
-					</form>
-				</div>';
-		}
-
-		elseif($statusOfMember == 1 && $_SESSION["admin"]){
-			$rankButton = '<div class="actionButton">
-					<form method="POST">
-						<input type="hidden" name="emailOfUserDemote" value='.$emailOfMember.'>
-						<button type="submit">Destituer</button>
-					</form>
-				</div>';
-		}
-		
-		else{
-			$rankButton ="";
-		}
-		echo ($statusOfMember==2)? "<td></td></tr>": $beginButton.$banButton.$eraseButton.$rankButton.$endButton;
-			}
-		echo "</table>";
-?>
-	</div>
+			?>
+		</tbody>
+	</table>
+</div>
 
 <?php
 include "bOffice - footer.php" ?>

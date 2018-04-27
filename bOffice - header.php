@@ -3,6 +3,9 @@ session_start();
 require "conf.inc.php";
 require "functions.php";
 preventXSS($_POST);
+// echo "<pre>";
+// print_r($_SESSION);
+// echo "</pre>";
 
 if(isset($_SESSION["token"])){
 	$result = getinfo("*");
@@ -50,11 +53,19 @@ else{
 				<center><h5>Vous êtes : <?php echo($_SESSION["admin"])? "Administrateur.":"Modérateur." ?></h5></center>
 
 				<nav class="navbar justify-content-center bOfficeNavigation">
-					<a class="nav-link active" href="bOffice - Users.php">Membres</a>
-					<a class="nav-link active" href="#">Evénements publics</a>
-					<a class="nav-link active" href="#">Evénements à valider</a>
-					<a class="nav-link active" href="#">Tickets</a>
-					<a class="nav-link active" href="index.php">Quitter l'administration</a>
+					<a class="nav-link" href="bOffice - Users.php">Membres</a>
+					<a class="nav-link" href="#">Evénements publics</a>
+					<a class="nav-link" href="#">Evénements à valider</a>
+						<div class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tickets</a>
+							<div class="dropdown-menu dropmenu" aria-labelledby="navbarDropdownMenuLink">
+								<a class="dropdown-item" href="bOffice - ticketsToDo.php">A traiter</a>
+								<a class="dropdown-item" href="bOffice - ticketsOpen.php">Ouvert</a>
+								<a class="dropdown-item" href="bOffice - ticketsClosed.php">Historique</a>
+							</div>
+						</div>
+
+					<a class="nav-link" href="index.php">Quitter l'administration</a>
 				</nav>
 		</section>
 	<hr>

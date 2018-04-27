@@ -22,12 +22,13 @@ if(isset($_POST["closeTicket"]) && !empty($_POST["closeTicket"])){
 		$time = getTimeForLog();
 		$userInfo = getInfo("member_id, member_lastname, member_firstname");
 		$connection = connectDB();
-		$query = $connection->prepare("UPDATE ticket SET state= :status, ticket_content= :content, last_update= NOW() WHERE member= :member_id AND ticket_id= :id");
+		$query = $connection->prepare("UPDATE ticket SET state= :status, ticket_content= :content, last_update= NOW(), author_last_update= :author_last_update WHERE member= :member_id AND ticket_id= :id");
 		$query->execute([
 			"status"=>1,
-			"content"=>$ticket["ticket_content"]."<br>".$userInfo["member_firstname"]." ".$userInfo["member_lastname"]." a fermé le ticket le ".$time."<br>",
+			"content"=>$ticket["ticket_content"]."<br><i>".$userInfo["member_firstname"]." ".$userInfo["member_lastname"]." a fermé le ticket le ".$time."</i><br>",
 			"member_id"=>$userInfo["member_id"],
-			"id"=>$_POST["closeTicket"]
+			"id"=>$_POST["closeTicket"],
+			"author_last_update"=>$userInfo["member_id"]
 		]);
 
 		header("Location: ../userTicket.php?ticket_id=".$_POST["closeTicket"]);
@@ -40,16 +41,17 @@ elseif(isset($_POST["updateTicket"]) && isset($_POST["ticketId"])){
 		$_SESSION["ticketError"] = true;
 		header("Location: ../userTicket.php");
 	}
-
-	elseif(strlen($_POST["updateTicket"]) > 10 || strlen($_POST["updateTicket"]) < 1000){
+	elseif((strlen($_POST["updateTicket"]) > 10 || strlen($_POST["updateTicket"]) < 1000) && $ticket["state"] == 0){
+		$_POST["updateTicket"] = trim($_POST["updateTicket"]);
 		$time = getTimeForLog();
 		$userInfo = getInfo("member_id, member_lastname, member_firstname");
 		$connection = connectDB();
-		$query = $connection->prepare("UPDATE ticket SET ticket_content= :content, last_update= NOW() WHERE member= :member_id AND ticket_id= :id");
+		$query = $connection->prepare("UPDATE ticket SET ticket_content= :content, last_update= NOW(), author_last_update= :author_last_update WHERE member= :member_id AND ticket_id= :id");
 		$query->execute([
 			"content"=>$ticket["ticket_content"]."<br><u>".$userInfo["member_firstname"]." ".$userInfo["member_lastname"]." le ".$time." :</u> <br>".$_POST["updateTicket"]."<br>",
 			"member_id"=>$userInfo["member_id"],
-			"id"=>$_POST["ticketId"]
+			"id"=>$_POST["ticketId"],
+			"author_last_update"=>$userInfo["member_id"]
 		]);
 		
 		header("Location: ../userTicket.php?ticket_id=".$_POST["ticketId"]);
@@ -58,8 +60,7 @@ elseif(isset($_POST["updateTicket"]) && isset($_POST["ticketId"])){
 	else{
 		$_SESSION["postForm"] = $_POST["updateTicket"];
 		$_SESSION["errorUpdateTicket"] = true;
-		echo strlen($_POST["updateTicket"]);
-		//header("Location: ../userTicket.php?ticket_id=".$_POST["ticketId"]);
+		header("Location: ../userTicket.php?ticket_id=".$_POST["ticketId"]);
 	}
 }
 
@@ -79,12 +80,13 @@ elseif(isset($_POST["reopenTicket"])){
 		$time = getTimeForLog();
 		$userInfo = getInfo("member_id,member_firstname,member_lastname");
 		$connection = connectDB();
-		$query = $connection->prepare("UPDATE TICKET set state= :state, ticket_content= :content, last_update= NOW() WHERE member= :member_id AND ticket_id= :id");
+		$query = $connection->prepare("UPDATE TICKET set state= :state, ticket_content= :content, last_update= NOW(), author_last_update= :author_last_update WHERE member= :member_id AND ticket_id= :id");
 		$query->execute([
 			"state"=>0,
-			"content"=>$ticket["ticket_content"]."<br>".$userInfo["member_firstname"]." ".$userInfo["member_lastname"]." a réouvert le ticket le".$time."<br>",
+			"content"=>$ticket["ticket_content"]."<br><i>".$userInfo["member_firstname"]." ".$userInfo["member_lastname"]." a réouvert le ticket le ".$time."<br></i>",
 			"member_id"=>$userInfo["member_id"],
-			"id"=>$_POST["reopenTicket"]
+			"id"=>$_POST["reopenTicket"],
+			"author_last_update"=>$userInfo["member_id"]
 		]);
 
 		header("Location: ../userTicket.php?ticket_id=".$_POST["reopenTicket"]);
@@ -93,5 +95,5 @@ elseif(isset($_POST["reopenTicket"])){
 
 else{
 	$_SESSION["ticketError"] = true;
-	//header("Location: ../userTicket.php");
+	header("Location: ../userTicket.php");
 }

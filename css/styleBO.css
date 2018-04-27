@@ -1,3 +1,4 @@
+/* CSS bOffice - Header */
 .title{
 	margin-top:10px;
 	text-align: center;
@@ -17,14 +18,87 @@ header{
 	padding-top:10px;
 }
 
-.actionButton{
-	padding-right:5px;
+.bOfficeTitle{
+	margin-top:0;
+}
+
+.bOfficeNavigation{
+	padding:0;
+}
+
+.dropmenu{
+	background-color:#DED9D9;
+}
+
+.dropmenu a:hover{
+	color:white;
+	background-color:grey;
+}
+
+/* CSS Users.php */
+.table-striped tbody tr:nth-of-type(1) {
+    background-color:dimgray
 }
 
 .erreur{
 	color:red;
 }
 
+.actionButton{
+	padding-right:5px;
+}
+
+.deleteButton:hover{
+	background-color:red;
+	color:white;
+}
+
+.button:hover{
+	background-color:black;
+	color:white;
+}
+
+.cancelButton{
+	background-color:red;
+	color:white;
+}
+
+.cancelButton:hover{
+	background-color:white;
+	color:red;
+	border:2px solid red;
+}
+
+/*CSS Tickets.php*/
+.openButton:hover{
+	background-color:white;
+	border:1px solid grey;
+}
+
+.ticketInfo{
+	position:fixed;
+}
+
+.locationMenu button{
+	background-color:blue;
+	color:white;
+}
+
+.button[disabled]:hover{
+	background-color:buttonface;
+	color:grey;
+}
+
+.actions{
+	padding-right:0px;
+}
+
+.research{
+	margin-left:5px;
+	margin-bottom:5px;
+}
+
+/* CSS ALL PAGES */
 .succes{
 	color:green;
 }
@@ -33,10 +107,7 @@ h5{
 	color:red;
 }
 
-.bOfficeTitle{
-	margin-top:0;
-}
-
-.bOfficeNavigation{
-	padding:0;
+thead{
+	color:white;
+	background-color:#211F2B;
 }

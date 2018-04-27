@@ -47,11 +47,21 @@ $listOfErrorsPwd = [
 $categoryOfContact = [
     1=>"Idée",
     2=>"Problème",
-    3=>"Commerciale"
+    3=>"Commercial"
 ];
 
 $listOfTicketError = [
     1=>"La catégorie n'est pas valide.",
     2=>"Le titre doit faire entre 4 et 60 caractères.",
     3=>"Le contenu du ticket doit faire entre 10 et 1 000 caractères.",
+];
+
+$ticketErrorBackOffice =[
+    1=>"Ce ticket est fermé.", 
+    2=>"Ce ticket est définitivement fermé.",
+    3=>"Ce ticket est déjà ouvert.",
+    4=>"Le message est vide.",
+    5=>"Ce ticket est déjà fermé.",
+    6=>"Ce ticket est définitivement fermé, aucune action n'est possible dessus.",
+    7=>"Ce ticket est déjà en traitement"
 ];

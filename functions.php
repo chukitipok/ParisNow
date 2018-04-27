@@ -3,14 +3,14 @@
 require_once "conf.inc.php";
 
 function connectDB(){
-		try{
-			$connection = new PDO(DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";charset=".CHARSET,DBUSER,DBPWD);
-            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	}
-		catch(Exception $e){
-			die("Erreur SQL :".$e->getMessage());	
-	}	
-	return $connection;
+  try{
+     $connection = new PDO(DBDRIVER.":host=".DBHOST.";dbname=".DBNAME.";charset=".CHARSET,DBUSER,DBPWD);
+     $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ }
+ catch(Exception $e){
+     die("Erreur SQL :".$e->getMessage());	
+ }	
+ return $connection;
 }
 
 function isConnected(){
@@ -26,9 +26,9 @@ function createToken(){
 
 function preventXSS(){
 	foreach ($_POST as $key => $value) {
-	$_POST[$key] = htmlspecialchars($_POST[$key]);
-}
-	return $_POST;
+       $_POST[$key] = htmlspecialchars($_POST[$key]);
+   }
+   return $_POST;
 }
 
 /*function findLocation(){
@@ -43,28 +43,28 @@ function preventXSS(){
 
 function Location(){
 	if(isset($_SESSION["previousLocation"]) && !empty($_SESSION["previousLocation"])){
-            $newLocation = $_SESSION["previousLocation"];
-            unset($_SESSION["previousLocation"]);
+        $newLocation = $_SESSION["previousLocation"];
+        unset($_SESSION["previousLocation"]);
 
-            if(isset($_SESSION["signUp"])){
-            	unset($_SESSION["signUp"]);
-            	return header("Location: ../".$newLocation);
-            }
-        	else{
-        		return header("Location: ".$newLocation);
-        	}
-        }
-    else{
-	    if(isset($_SESSION["signUp"]) && $_SESSION["signUp"]){
-	    	unset($_SESSION["signUp"]);
-	    	return header("Location: ../index.php");
-	    }
-	    elseif(isset($_SESSION["signUp"]) && !$_SESSION["signUp"]){
-	    	return header("Location: ../signup.php");
-	    }
-	    else
-	    	return header("Location: index.php");
-	}
+        if(isset($_SESSION["signUp"])){
+           unset($_SESSION["signUp"]);
+           return header("Location: ../".$newLocation);
+       }
+       else{
+          return header("Location: ".$newLocation);
+      }
+  }
+  else{
+   if(isset($_SESSION["signUp"]) && $_SESSION["signUp"]){
+      unset($_SESSION["signUp"]);
+      return header("Location: ../index.php");
+  }
+  elseif(isset($_SESSION["signUp"]) && !$_SESSION["signUp"]){
+      return header("Location: ../signup.php");
+  }
+  else
+      return header("Location: index.php");
+}
 }
 
 function connectUser()
@@ -91,12 +91,12 @@ function connectUser()
         unset($_SESSION["pwdConnect"]);
         unset($_SESSION["emailConnect"]);
         return location();
-	}else{
-	    echo "NOK";
-        $file = fopen('log.txt', 'a+');
-        fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
-        fclose($file);
-        }
+    }else{
+     echo "NOK";
+     $file = fopen('log.txt', 'a+');
+     fwrite($file, $_POST["emailConnect"] . " -> " . $_POST["pwdConnect"] . "\r\n");
+     fclose($file);
+ }
 }
 
 function getInfo($column){
@@ -104,10 +104,10 @@ function getInfo($column){
         if(isset($column)){
             $connection = connectDB();
             $query = $connection->prepare("SELECT ".$column." FROM member WHERE member_id = :id AND member_token = :token;");
-                $query->execute([
-                        "id"=> $_SESSION["id"],
-                        "token" => $_SESSION["token"]
-                ]);
+            $query->execute([
+                "id"=> $_SESSION["id"],
+                "token" => $_SESSION["token"]
+            ]);
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return $result;
         }
@@ -132,7 +132,7 @@ function unsetAdmin(){
         unset($_SESSION["firstName"]);
 }
 
-function ticketInformation(){
+function ticketID(){
     if(isset($_POST["closeTicket"])){
         $ticketID = $_POST["closeTicket"];
     }
@@ -145,11 +145,40 @@ function ticketInformation(){
         $ticketID = $_POST["reopenTicket"];
     }
 
+    elseif(isset($_POST["defCloseTicket"])){
+        $ticketID = $_POST["defCloseTicket"];
+    }
+
+    elseif(isset($_POST["backToTreatment"])){
+        $ticketID = $_POST["backToTreatment"];
+    }
+
+    else{
+        return;
+    }
+
+    return $ticketID;
+}
+
+function ticketInformation(){
+    $ticketID = ticketID($_POST);
     $userInfo = getInfo("member_id");
     $connection = connectDB();
     $query = $connection->prepare("SELECT * FROM ticket WHERE member= :member_id AND ticket_id= :id");
     $query->execute([
         "member_id"=>$userInfo["member_id"],
+        "id"=>$ticketID
+    ]);
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function ticketInformationBackOffice(){
+    $ticketID = ticketID($_POST);
+    $userInfo = getInfo("member_id");
+    $connection = connectDB();
+    $query = $connection->prepare("SELECT * FROM ticket WHERE ticket_id= :id");
+    $query->execute([
         "id"=>$ticketID
     ]);
     $result = $query->fetch(PDO::FETCH_ASSOC);

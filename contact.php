@@ -61,15 +61,13 @@ if(isConnected()){
 	</div>
 	<div class="row">
 
-		<div class="col-3">
+		<div class="col-4">
 		</div>
 
-		<div class="col-6">
+		<div class="col-4">
 			<div class="form-group">
 				<label>Description du ticket</label>
-				<textarea name="ticket_content" class="form-control" rows="10">
-					<?php echo (isset($_SESSION["postForm"]["ticket_content"]))? $_SESSION["postForm"]["ticket_content"]:""; ?>
-				</textarea>
+				<textarea class="form-control" name="ticket_content" rows="10"><?php echo (isset($_SESSION["postForm"]["ticket_content"]))? $_SESSION["postForm"]["ticket_content"]: ""?></textarea>
 				<?php
 				if(isset($_SESSION["errorTicket"])){
 					foreach ($_SESSION["errorTicket"] as $key => $value) {
@@ -77,8 +75,8 @@ if(isConnected()){
 					}
 				}
 				?>
-			</div>
 			<button type="submit" class="btn btn-info">Envoyer</button>
+			</div>
 		</div>
 		</form>
 	</div>
