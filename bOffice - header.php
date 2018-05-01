@@ -3,9 +3,6 @@ session_start();
 require "conf.inc.php";
 require "functions.php";
 preventXSS($_POST);
-// echo "<pre>";
-// print_r($_SESSION);
-// echo "</pre>";
 
 if(isset($_SESSION["token"])){
 	$result = getinfo("*");
