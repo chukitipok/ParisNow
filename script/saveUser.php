@@ -3,9 +3,9 @@
     session_start();
 	require "../conf.inc.php";
 	require "../functions.php";
-	
+
 	//Vérifier que le formulaire soit complet
-	if( count($_POST)  == 10
+	if( count($_POST)  == 12
 		&& isset($_POST["gender"])
 		&& !empty($_POST["firstname"])
 		&& !empty($_POST["lastname"])
@@ -14,21 +14,48 @@
 		&& !empty($_POST["pwd"])
 		&& !empty($_POST["pwdConfirm"])
 		&& !empty($_POST["address"])
+		&& !empty($_POST["city"])
 		&& !empty($_POST["zipcode"])
+//		&& isset($_POST["picture"])
 		&& !empty($_POST["cgu"])
 	){
-	
+
 		$error = false;
 		$listOfErrors = [];
+        $listOfPictureType = [
+            1=>"image/gif",
+            2=>"image/jpeg",
+            3=>"image/jpg",
+            4=>"image/png"
+        ];
 
 		//Nettoyer les valeurs
 		$_POST["firstname"] = ucfirst(trim(mb_strtolower($_POST["firstname"])));
 		$_POST["lastname"] = trim(strtoupper($_POST["lastname"]));
+		$_POST["lastname"] = trim(strtoupper($_POST["city"]));
 		$_POST["email"] = trim(mb_strtolower($_POST["email"]));
 		$_POST["birthday"] = trim($_POST["birthday"]);
-		$_POST["address"] = trim(mb_strtolower($_POST["address"]));
-		
+		$_POST["address"] = trim(mb_strtoupper($_POST["address"]));
+
+		$filename = cleanPictureName($_FILES['picture']['name']);
+
 		//vérifier les valeurs une par une
+        //lastname only alphanumeric
+        if (!verif_alpha($_POST["lastname"])){
+            $errorInfo = true;
+            $listOfErrorsInfo[] = 13;
+        }
+        //firstname only alphanumeric
+        if (!verif_alpha($_POST["firstname"])){
+            $errorInfo = true;
+            $listOfErrorsInfo[] = 14;
+        }
+        /* TODO: vérification de l'adresse, error n°15*/
+        //city name only alphanumeric
+        if(!verif_alpha($_POST["city"])){
+            $error = true;
+            $listeOfErrors[] = 18;
+        }
 		//gender : soit 0, soit 1, soit 2
 		if( !array_key_exists ( $_POST["gender"] , $listOfGender )  ){
 			$error = true;
@@ -105,6 +132,21 @@
 			$error = true;
             $listeOfErrors[] = 10;
 		}
+		if ($_FILES['picture']['size'] != 0){
+            //file type : jpg, png, jpeg, gif
+            if (!verifPictureType($_FILES)){
+                $error = true;
+                $listeOfErrors[] = 16;
+            }
+
+            //Picture size under 30000 bytes
+            if (!verifPictureSize($_FILES)){
+                $error = true;
+                $listeOfErrors[] = 17;
+            }
+        }else{
+            $filename = null;
+        }
 
 		if($error){
 			$_SESSION["signUp"] = FALSE;
@@ -113,13 +155,16 @@
 			Location();
 
 		}else{
+		    if ($_FILES['picture']['size'] > 0) {
+                uploadPicture($_FILES);
+            }
 			$query = $connection->prepare(
 			    "INSERT INTO member ( 
                               gender, member_lastname,member_firstname,member_address,
                               member_zip_code, member_birthday, member_email,member_password,
-                              member_status, account_creation) 
+                              member_status, member_picture, account_creation) 
                           VALUES (:gender, :lastname, :firstname, :address, :zipcode,
-                                  :birthday, :email, :password, :status, NOW()); ");
+                                  :birthday, :email, :password, :status, :picture, NOW()); ");
 			$pwd = $_POST["pwd"];
 			$query->execute( [
 								"gender"=>$_POST["gender"],
@@ -129,8 +174,9 @@
 								"zipcode"=>$_POST["zipcode"],
 								"birthday"=> $year."-".$month."-".$day,
                                 "email"=>$_POST["email"],
+                                "picture"=>$filename,
 								"password"=>password_hash($pwd, PASSWORD_DEFAULT),
-                                "status"=>0,
+                                "status"=>0
 							] );
 			$_SESSION["signUp"] = TRUE;
 			$_SESSION["emailConnect"] = $_POST["email"];
