@@ -22,7 +22,13 @@ $listOfErrors = [
     9=>"Le mot de passe doit faire entre 8 et 20 caractères",
     10=>"Le mot de passe de confirmation ne correspond pas",
     11=>"L'email existe déjà",
-    12=>"Tous les champs doivent être remplis"
+    12=>"Tous les champs doivent être remplis",
+    13=>"Le nom n'est pas valide",
+    14=>"Le prénom n'est pas valide",
+    15=>"L'adresse n'est pas valide",
+    16=>"L'image n'est pas de type JPEG/JPG/PNG/GIF",
+    17=>"La taille de l'image est trop grande",
+    18=>"Le nom de la ville n'est pas valide"
 ];
 
 $listOfErrorsInfo = [
@@ -47,7 +53,7 @@ $listOfErrorsPwd = [
 $categoryOfContact = [
     1=>"Idée",
     2=>"Problème",
-    3=>"Commercial"
+    3=>"Commerciale"
 ];
 
 $listOfTicketError = [
