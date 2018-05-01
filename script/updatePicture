@@ -1,0 +1,55 @@
+<?php
+
+session_start();
+require "../conf.inc.php";
+require "../functions.php";
+
+
+    if (isset($_POST['updatePicture']) && !empty($_POST['updatePicture'])){
+        $db = connectDB();
+        $error = false;
+        $listeOfErrors = [];
+        $oldFilename = getInfo('member_picture');
+        $filename = cleanPictureName($_FILES['newPicture']['name']);
+
+        if ($_FILES['newPicture']['size'] != 0){
+            //file type : jpg, png, jpeg, gif
+            if (!verifPictureType($_FILES)){
+                $error = true;
+                $listeOfErrors[] = 16;
+            }
+
+            //Picture size under 30000 bytes
+            if (!verifPictureSize($_FILES)){
+                $error = true;
+                $listeOfErrors[] = 17;
+            }
+        }else{
+            $filename = null;
+        }
+
+        if($error){
+            $_SESSION["signUp"] = FALSE;
+            $_SESSION["errorForm"] = $listeOfErrors;
+            Location();
+
+        }else {
+            if ($_FILES['newPicture']['size'] > 0) {
+                uploadPicture($_FILES);
+            }
+            
+            if ($oldFilename != null){
+                deleteProfilePicture($oldFilename);
+            }
+
+            $query = $db->prepare("UPDATE member 
+                                            SET member_picture = :picture
+                                            WHERE member_id = :id AND member_token = :token;");
+            $query->execute([
+                "picture" => $filename,
+                "id" => $_SESSION["id"],
+                "token" => $_SESSION["token"]
+            ]);
+            header("Location: ../userSettings.php");
+        }
+    }
