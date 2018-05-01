@@ -6,22 +6,27 @@ require_once "functions.php";
 
 if (isConnected()) {
     if (!empty($_SESSION["token"])) {
-        $db = connectDB();
-        $query = $db->prepare("SELECT member_lastname, member_firstname, member_email,member_address, member_zip_code 
-                                        FROM member 
-                                        WHERE member_id = :id AND member_token = :token;");
-        $query->execute([
-            "id" => $_SESSION["id"],
-            "token" => $_SESSION["token"]
-        ]);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
+        $member = getInfo('*');
     }
+    if ($member['member_picture'] == null){
+        if ($member['gender'] == 2){
+            $default = 'img/default/default_girl.jpg';
+        }else{
+            $default = 'img/default/default_boy.jpg';
+        }
+    }
+
     ?>
     <div class="container">
         <div id="profile-picture" class="">
-            <img class="profile-picture" src="img/paris1.jpg" alt="profile picture">
-            <br>
-            <button style="margin-top: 15px" class="btn btn-primary">Modifier</button>
+            <img class="profile-picture" src="<?php echo ($member['member_picture'] != null)?'upload/'.$member['member_picture']:$default ?>"
+                 alt="profile picture">
+            <form action="script/updatePicture.php" method="POST" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <input type="file" name="newPicture" class="form-control-file">
+                    <input type="submit" name="updatePicture" class="btn btn-primary">
+                </div>
+            </form>
         </div>
     </div>
 
