@@ -43,28 +43,29 @@ function preventXSS(){
 
 function Location(){
 	if(isset($_SESSION["previousLocation"]) && !empty($_SESSION["previousLocation"])){
-        $newLocation = $_SESSION["previousLocation"];
-        unset($_SESSION["previousLocation"]);
+		$newLocation = $_SESSION["previousLocation"];
+		unset($_SESSION["previousLocation"]);
 
-        if(isset($_SESSION["signUp"])){
-           unset($_SESSION["signUp"]);
-           return header("Location: ../".$newLocation);
-       }
-       else{
-          return header("Location: ".$newLocation);
-      }
-  }
-  else{
-   if(isset($_SESSION["signUp"]) && $_SESSION["signUp"]){
-      unset($_SESSION["signUp"]);
-      return header("Location: ../index.php");
-  }
-  elseif(isset($_SESSION["signUp"]) && !$_SESSION["signUp"]){
-      return header("Location: ../signup.php");
-  }
-  else
-      return header("Location: index.php");
-}
+		if(isset($_SESSION["signUp"])){
+			unset($_SESSION["signUp"]);
+			return header("Location: ../".$newLocation);
+		}
+		else{
+			return header("Location: ".$newLocation);
+		}
+	}
+	else{
+		if(isset($_SESSION["signUp"]) && $_SESSION["signUp"]){
+			unset($_SESSION["signUp"]);
+			return header("Location: ../index.php");
+		}
+		elseif(isset($_SESSION["signUp"]) && !$_SESSION["signUp"]){
+			return header("Location: ../signup.php");
+		}
+		else{
+			return header("Location: index.php");
+		}
+	}
 }
 
 function connectUser()
@@ -194,10 +195,55 @@ function getTimeForLog(){
 }
 
 function verif_alpha($str){
-    preg_match("/([^A-Za-z])/",$str,$result);
-//On cherche tt les caractères autre que [A-z]
-    if(!empty($result)){//si on trouve des caractère autre que A-z
+    preg_match("/([^A-Za-zÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ])/",$str,$result);
+    if(!empty($result)){//si on trouve des caractère autre que ceux rechercher
         return false;
     }
     return true;
+}
+
+function uploadPicture (array $infoFiles){
+    $infoFiles = current($infoFiles);
+    $filename = cleanPictureName($infoFiles['name']);
+    move_uploaded_file($infoFiles['tmp_name'],'C:/wamp64/www/ParisNow/upload/'.$filename);
+}
+
+function cleanPictureName($filename){
+    $filename = strtr(
+        $filename,
+        '@ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ',
+        'aAAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy'
+    );
+    $filename = preg_replace(
+        "/([^.a-z0-9]+)/i",
+        '-',
+        $filename
+    );
+    $filename = strtolower(date("G-i-s").$filename);
+    return $filename;
+}
+
+// check types of a picture : jpeg/jpg/png/gif
+function verifPictureType(array $infoFiles){
+    $infoFiles = current($infoFiles);
+    $listOfPictureType = [
+        1=>"image/gif",
+        2=>"image/jpeg",
+        3=>"image/jpg",
+        4=>"image/png"
+    ];
+    return in_array($infoFiles['type'], $listOfPictureType);
+}
+
+//check size of a picture (not over 50000 ko)
+function verifPictureSize(array $infoFiles){
+    $infoFiles = current($infoFiles);
+    if ($infoFiles['size'] > 50000)
+        return false;
+    return true;
+}
+
+// delete old profile picture from folder "upload"
+function deleteProfilePicture(array $filename) {
+    unlink('C:/wamp64/www/ParisNow/upload/'. $filename['member_picture']);
 }
