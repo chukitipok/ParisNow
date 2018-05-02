@@ -2,10 +2,10 @@
 require "bOffice - header.php";
 include "bOffice - ticketsMenu.php";
 
-$_SESSION["location"] = "bOffice - ticketsOpen.php";
+$_SESSION["location"] = "bOffice - ticketsOpen.php"; //This session is used for the value of the "href" of the <a> balise named "Retour aux tickets" in the bOffice - ticket.php page.
 ?>
 
-<table class='table'>
+<table class='table table-striped'>
 	<thead>
 		<tr>
 			<th>ID</th>
@@ -21,7 +21,7 @@ $_SESSION["location"] = "bOffice - ticketsOpen.php";
 	<tbody>
 		<?php
 		foreach ($tickets as $line => $ticket) {
-			if($ticket["state"] == 0 && ($ticket["author_last_update"] != $ticket["member"])){
+			if($ticket["state"] == 0 && ($ticket["author_last_update"] != $ticket["member"])){ // It show all tickets that are not closed but that the staff have already treated. So tickets were the author of last update is not the creator. 
 				$query = $connect->prepare("SELECT member_lastname, member_firstname FROM ticket,member where :author_last_update = member_id");
 				$query->execute([
 					"author_last_update"=> $ticket["author_last_update"]

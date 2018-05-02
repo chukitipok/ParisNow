@@ -1,0 +1,137 @@
+/* CSS bOffice - Header */
+.title{
+	text-align: center;
+	text-align: bottom;
+	color:darkcyan;
+	margin-top:0px;
+	font-size:60px;
+}
+
+.arrowDrop:hover{
+	color:orange;
+}
+
+.arrowDrop{
+	color:black;
+	background-color:grey;
+}
+
+header{
+	background-color:#211F2B;
+	margin-top:-10px;
+	padding-top:10px;
+}
+
+.buttonHeader{
+	background-color:#00294d;
+	color:aqua;
+}
+
+.activeHeader, .buttonHeader:hover{
+	background-color:teal!important;
+	color:cyan!important;
+}
+
+.bOfficeNavigation{
+	padding:0;
+}
+
+.dropmenu{
+	background-color:#DED9D9;
+}
+
+.dropmenu a:hover{
+	color:white;
+	background-color:grey;
+}
+
+/* CSS Users.php */
+.notStrip{
+    background-color:dimgray!important;
+}
+
+.erreur{
+	color:red;
+}
+
+.actionButton{
+	padding-right:5px;
+}
+
+.deleteButton:hover{
+	background-color:red;
+	color:white;
+}
+
+.button:hover{
+	background-color:black;
+	color:white;
+}
+
+.cancelButton{
+	background-color:red;
+	color:white;
+}
+
+.cancelButton:hover{
+	background-color:white;
+	color:red;
+	border:2px solid red;
+}
+
+/*CSS Tickets.php*/
+.openButton:hover{
+	background-color:white;
+	border:1px solid grey;
+}
+
+.answerButton{
+	margin-top:7px;
+}
+
+.menuticket:hover{
+background-color:teal;
+color:white;
+}
+
+.menuticket{
+	color:teal;
+	background-color:white;
+	border:1px solid teal;
+}
+
+.locationMenu button{
+	background-color:teal;
+	color:white;
+}
+
+.button[disabled]:hover{
+	background-color:buttonface;
+	color:grey;
+}
+
+.actions{
+	padding-right:0px;
+}
+
+.research{
+	margin-left:5px;
+	margin-bottom:5px;
+}
+
+.backToTicketButton{
+	margin-left:5%;
+}
+/* CSS ALL PAGES */
+.succes{
+	color:green;
+}
+
+h5{
+	color:red;
+}
+
+thead{
+	color:white;
+	background-color:#211F2B;
+}

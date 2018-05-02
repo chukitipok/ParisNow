@@ -2,10 +2,10 @@
 require "bOffice - header.php";
 include "bOffice - ticketsMenu.php";
 
-$_SESSION["location"] = "bOffice - ticketsClosed.php";
+$_SESSION["location"] = "bOffice - ticketsClosed.php"; //This session is used for the value of the "href" of the <a> balise named "Retour aux tickets" in the bOffice - ticket.php page.
 ?>
 
-<table class="table">
+<table class="table table-striped">
 	<thead>
 		<tr>
 			<th>ID</th>
@@ -21,7 +21,7 @@ $_SESSION["location"] = "bOffice - ticketsClosed.php";
 	</thead>
 	<tbody>
 		<?php
-		foreach ($tickets as $line => $ticket) {
+		foreach ($tickets as $line => $ticket) { //Using the query from the ticketmenu.php it will show all tickets that are closed and definitily closed
 			if($ticket["state"] == 1 || $ticket["state"] == 2){
 				$query = $connect->prepare("SELECT member_lastname, member_firstname FROM ticket,member where :author_last_update = member_id");
 				$query->execute([

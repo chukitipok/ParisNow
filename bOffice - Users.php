@@ -1,16 +1,16 @@
 <?php
-require "bOffice - header.php"; 
+require "bOffice - header.php";
 $time = getTimeForLog();
 
 if(isset($_POST["cancelDelete"]) && isset($_SESSION["cancelDelete"])){
-	
+
 	foreach ($_SESSION["cancelDelete"] as $key2 => $value2) {
 
 		if(!isset($column_name) && (!isset($valuesInserted))){
 			$columnName = $key2;
 			$valuesInserted = $value2;
 		}
-		
+
 		elseif($value2 =="")
 			$value2 = Null;
 
@@ -21,7 +21,7 @@ if(isset($_POST["cancelDelete"]) && isset($_SESSION["cancelDelete"])){
 
 		else{
 			$columnName = $columnName.",".$key2;
-			$valuesInserted = $valuesInserted.",'".$value2."'";	
+			$valuesInserted = $valuesInserted.",'".$value2."'";
 		}
 	}
 	$connection = connectDB();
@@ -74,7 +74,7 @@ if(isset($_POST["emailOfUserPromote"])){
 	$query->execute([
 		"email"=>$_POST["emailOfUserPromote"]
 	]);
-	$result = $query->fetch(PDO::FETCH_ASSOC);	
+	$result = $query->fetch(PDO::FETCH_ASSOC);
 	if($result["member_status"] == 0 && $_SESSION["admin"]){
 		$query = $connection->prepare("UPDATE member set member_status = 1 where member_email= :email");
 		$query->execute([
@@ -88,7 +88,7 @@ if(isset($_POST["emailOfUserPromote"])){
 	else{
 		?>
 		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
-		<?php 
+		<?php
 	}
 }
 
@@ -99,7 +99,7 @@ if(isset($_POST["emailOfUserDemote"])){
 	$query->execute([
 		"email"=>$_POST["emailOfUserDemote"]
 	]);
-	$result = $query->fetch(PDO::FETCH_ASSOC);	
+	$result = $query->fetch(PDO::FETCH_ASSOC);
 	if($result["member_status"] == 1 && $_SESSION["admin"]){
 		$query = $connection->prepare("UPDATE member set member_status = 0 where member_email= :email");
 		$query->execute([
@@ -113,7 +113,7 @@ if(isset($_POST["emailOfUserDemote"])){
 	else{
 		?>
 		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
-		<?php 
+		<?php
 	}
 }
 
@@ -124,7 +124,7 @@ if(isset($_POST["emailOfUserUnban"])){
 	$query->execute([
 		"email"=>$_POST["emailOfUserUnban"]
 	]);
-	$result = $query->fetch(PDO::FETCH_ASSOC);	
+	$result = $query->fetch(PDO::FETCH_ASSOC);
 	if($result["member_status"] == 3){
 		$query = $connection->prepare("UPDATE member set member_status=0 where member_email= :email");
 		$query->execute([
@@ -138,7 +138,7 @@ if(isset($_POST["emailOfUserUnban"])){
 	else{
 		?>
 		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
-		<?php 
+		<?php
 	}
 }
 
@@ -164,7 +164,7 @@ if(isset($_POST["emailOfUserBan"])){
 	else{
 		?>
 		<center><h2 class="erreur">Erreur: Vous n'avez pas les droits pour effectuer cette action</h2></center>
-		<?php 
+		<?php
 	}
 }
 
@@ -181,7 +181,7 @@ if(isset($_POST["emailOfUserBan"])){
 			</tr>
 		</thead>
 		<tbody>
-			<tr>		
+			<tr class="notStrip">
 				<form method="POST">
 					<td>
 						<div class="container-fluid row">
@@ -242,7 +242,7 @@ if(isset($_POST["emailOfUserBan"])){
 			}
 
 			elseif(!empty($_POST["searchLastname"]) || !empty($_POST["searchFirstname"]) || !empty($_POST["searchEmail"]) || !empty($_POST["searchStatus"])){
-				$connection = connectDB();	
+				$connection = connectDB();
 				$query = $connection->prepare("SELECT member_lastname,member_firstname,member_email,member_status FROM member WHERE member_lastname= :lastName OR member_firstname= :firstName OR member_email= :email OR member_status= :status");
 
 				$query->execute([
@@ -298,7 +298,7 @@ if(isset($_POST["emailOfUserBan"])){
 
 					if($key == "member_email"){
 						$emailOfMember = $value2;
-					}				
+					}
 				}
 				$beginButton = '<td><div class="row">';
 				$endButton = '</div></td></tr>';
